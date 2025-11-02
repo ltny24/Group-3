@@ -47,7 +47,7 @@ ITSS được thiết kế để giải quyết các vấn đề trên thông qu
 
 Hệ thống ITSS được cấu trúc theo kiến trúc **Microservices** và được phân rã thành các module chức năng độc lập như sau:
 
-### 2.1 Kiến trúc Công nghệ (Technology Stack) ⚙️
+### 2.1 Kiến trúc Công nghệ (Technology Stack) 
 
 | Lớp (Layer) | Công nghệ Đề xuất | Mục đích Chính |
 | :--- | :--- | :--- |
@@ -113,7 +113,7 @@ Quá trình hoạt động của hệ thống:
 
 ---
 
-## 3. Phân công Công việc (Work Assignment) 🧑‍💻
+## 3. Phân công Công việc (Work Assignment) 
 
 Dưới đây là bảng phân công chi tiết vai trò, nhiệm vụ và branch phát triển tương ứng cho từng thành viên trong dự án.
 
