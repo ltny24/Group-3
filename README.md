@@ -22,7 +22,7 @@ ITSS được thiết kế để giải quyết các vấn đề trên thông qu
 | **I. Nhận diện Thông minh** | **Phát hiện và Phân loại thiên tai** (bão, lũ lụt, cháy rừng, sóng thần, v.v.) bằng mô hình học sâu (Deep Learning) từ dữ liệu vệ tinh và khí tượng. | AI/Machine Learning |
 | **II. Đánh giá Rủi ro Đa chiều** | Tính toán **Safety Score** dựa trên tổ hợp của **3 yếu tố**: 1. Thiên tai dự báo, 2. Dữ liệu lịch sử, và 3. Mức độ dễ bị tổn thương của khu vực (mật độ dân số, cơ sở hạ tầng). | Fuzzy Logic/Regression Models |
 | **III. Hỗ trợ Quyết định (Decision Support)** | Cung cấp Bản đồ Tương tác giúp du khách **trực quan hóa rủi ro** và xác định ngay lập tức **lộ trình an toàn** cùng các điểm trú ẩn gần nhất. | GIS/Geospatial Algorithms |
-### 1.3 Bối cảnh Sử dụng Chính (Key Use Cases) 🗺️
+### 1.3 Bối cảnh Sử dụng Chính (Key Use Cases) 
 
 * **Cảnh báo theo Vị trí:** Hệ thống tự động gửi cảnh báo nếu người dùng di chuyển vào bán kính rủi ro (ví dụ: khu vực dự kiến ngập lụt sau 3 giờ).
 * **Lập kế hoạch Hành trình An toàn:** Trước khi di chuyển, người dùng có thể kiểm tra "Safety Score" của điểm đến và tuyến đường để chọn lộ trình ít rủi ro nhất.
