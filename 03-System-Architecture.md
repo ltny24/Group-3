@@ -2,8 +2,8 @@
 
 **Dự án:** Intelligent Travel Safety System (PWA)  
 **Phiên bản:** 1.4 (Hoàn thiện chính sách Gateway, Log Level và Chi tiết Deployment)  
-**Dựa trên:** [02-SRS-Requirements.md](./02-SRS-Requirements.md) (SRS 2.1)  
-**Người xây dựng:** *System Architect (Gemini)*  
+**Dựa trên:** [02-SRS-Requirements.md](./02-SRS-Requirements.md) 
+**Người xây dựng:** *System Architect
 
 ---
 
@@ -42,7 +42,7 @@ Mô hình này đảm bảo tính **độc lập**, **khả năng mở rộng (N
 | **Gửi SOS Fallback** | A-07 → External SMS/Email | Bất đồng bộ | RabbitMQ/Kafka | Đảm bảo gửi tin khẩn cấp ngay cả khi chậm trễ |
 | **Xác thực User** | A-02 → A-05 | Đồng bộ (HTTP/gRPC) | JWT/Gateway Logic | Bắt buộc xác thực Token trước mọi request |
 
-> 🔹 **Ghi chú:** Sơ đồ tuần tự (Sequence Diagram) chi tiết được đính kèm trong *Phụ lục A*.
+>  **Ghi chú:** Sơ đồ tuần tự (Sequence Diagram) chi tiết được đính kèm trong *Phụ lục A*.
 
 ---
 
@@ -61,7 +61,7 @@ Mô hình này đảm bảo tính **độc lập**, **khả năng mở rộng (N
 
 ## V. SƠ ĐỒ LUỒNG DỮ LIỆU (DATA FLOW DIAGRAM - DFD)
 
-### 🔹 Luồng 1: Tính toán & Phân phối Cảnh báo
+###  Luồng 1: Tính toán & Phân phối Cảnh báo
 ```mermaid
 sequenceDiagram
     participant API_External as External APIs
@@ -76,7 +76,7 @@ sequenceDiagram
     AlertHub-->>PWA: Gửi Web Push Notification (Async)
 ```
 
-### 🔹 Luồng 2: Xử lý Yêu cầu SOS
+###  Luồng 2: Xử lý Yêu cầu SOS
 ```mermaid
 sequenceDiagram
     participant PWA as A-01 PWA Client
@@ -90,7 +90,7 @@ sequenceDiagram
     SOS-->>PWA: Xác nhận thành công
 ```
 
-### 🧩 Hệ thống Log tập trung (Centralized Logging)
+###  Hệ thống Log tập trung (Centralized Logging)
 Tất cả các microservice từ **A-02 đến A-07** đẩy log về hệ thống trung tâm:
 - **Công nghệ:** ELK Stack *(Elasticsearch, Logstash, Kibana)* hoặc *CloudWatch/Datadog*  
 - **Log Level Policy:**
@@ -102,13 +102,13 @@ Tất cả các microservice từ **A-02 đến A-07** đẩy log về hệ th�
 
 ## VI. KIẾN TRÚC CLIENT (PWA & OFFLINE)
 
-### 1️⃣ Offline First Flow (Ví dụ SOS)
+### 1️ Offline First Flow (Ví dụ SOS)
 1. User nhấn nút **SOS** → PWA gửi API  
 2. Nếu mất mạng → Service Worker lưu request vào **IndexedDB Queue**  
 3. Khi kết nối phục hồi → SW **Background Sync** tự động gửi lại  
 4. SOS Service phản hồi thành công → SW xóa request trong queue
 
-### 2️⃣ Quản lý Cache (FR3.2)
+### 2️ Quản lý Cache (FR3.2)
 
 | Thành phần | Cơ chế | Hạn mức |
 |-------------|--------|---------|
@@ -146,7 +146,7 @@ Tất cả các microservice từ **A-02 đến A-07** đẩy log về hệ th�
 
 ## VIII. SƠ ĐỒ USE CASE (USE CASE DIAGRAM)
 
-### 🔹 Use Case Chính
+###  Use Case Chính
 - **UC1 – Đăng nhập / Xác thực**
 - **UC2 – Nhận cảnh báo an toàn**
 - **UC3 – Gửi yêu cầu SOS**
@@ -155,21 +155,16 @@ Tất cả các microservice từ **A-02 đến A-07** đẩy log về hệ th�
 - **UC6 – Cập nhật mô hình AI (Admin)**
 
 ```mermaid
-%% Sơ đồ Use Case cho hệ thống ITSS
-usecaseDiagram
-    actor "Người dùng" as User
-    actor "Hệ thống ngoài" as ExternalAPI
-    actor "Quản trị viên" as Admin
+flowchart TD
+    User(["Người dùng"]) -->|UC1| DangNhap["Đăng nhập / Xác thực"]
+    User -->|UC2| CanhBao["Nhận cảnh báo an toàn"]
+    User -->|UC3| SOS["Gửi yêu cầu SOS"]
+    User -->|UC4| ViTri["Quản lý vị trí yêu thích"]
+    User -->|UC5| BanDo["Xem bản đồ an toàn"]
 
-    User --> (UC1: Đăng nhập / Xác thực)
-    User --> (UC2: Nhận cảnh báo an toàn)
-    User --> (UC3: Gửi yêu cầu SOS)
-    User --> (UC4: Quản lý vị trí yêu thích)
-    User --> (UC5: Xem bản đồ an toàn)
-    Admin --> (UC6: Cập nhật mô hình AI)
-    ExternalAPI --> (Cung cấp dữ liệu thời tiết/thiên tai)
+    Admin(["Quản trị viên"]) -->|UC6| AI["Cập nhật mô hình AI"]
 
----
+    ExternalAPI(["Hệ thống ngoài"]) -->|>| Data["Cung cấp dữ liệu thời tiết / thiên tai"]
 ```
 
 ## IX. SƠ ĐỒ ERD TRỰC QUAN (ENTITY RELATIONSHIP DIAGRAM)
