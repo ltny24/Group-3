@@ -1,94 +1,98 @@
-# README: Module Đánh giá Rủi ro AI (ai-risk-evaluation)
+# ĐÁNH GIÁ RỦI RO THIÊN TAI 
 
+## 1. Giới thiệu
 
-## 1. 🎯 Mục tiêu và Vai trò
-
-
-* **Dự án:** Ứng dụng Cảnh báo Thời tiết & Thiên tai Du lịch
-* **Module:** `ai-risk-evaluation`
-* **Người thực hiện:** AI Developer 2
-
-
-Nhiệm vụ của module `ai-risk-evaluation` là đóng vai trò **"Bộ não Logic"** trung tâm của toàn bộ hệ thống. Module này chịu trách nhiệm:
-
-
-1.  Tiếp nhận dữ liệu thô (thời tiết, GIS) từ **Data Engineer** và dữ liệu dự đoán (bão, lũ) từ **AI Developer 1**.
-2.  Phát triển và áp dụng các thuật toán (Rules/Fuzzy Logic) để **phân loại** mức độ rủi ro cho từng loại thiên tai.
-3.  Tính toán một "Safety Score" tổng hợp (thông qua **Thuật toán Ưu tiên**) để xác định `Rủi_ro_Chung` (Cao / Trung bình / Thấp).
-4.  Cung cấp một API đầu ra (Output) rõ ràng cho **Algorithm Designer** (tô màu bản đồ) và **UI/UX Developer** (hiển thị cảnh báo).
-
+Mục tiêu của hệ thống là **tính toán Safety Score (thang 0–10)** thể hiện mức độ an toàn của một khu vực trước rủi ro thiên tai.  
+Phần này tập trung vào **vulnerability** – mức độ dễ bị tổn thương của con người và hạ tầng — từ đó kết hợp với **xác suất thiên tai (hazard probability)** do nhóm khác cung cấp để tính ra **Safety Score tổng hợp**.
 
 ---
 
+## 2. Thành phần dữ liệu đầu vào
 
-## 2. 🧩 Phân rã Công việc (Work Breakdown Structure)
+### 2.1. Hazard Probability
+- Được cung cấp từ mô hình AI nhận diện thiên tai (phần I).  
+- Thể hiện xác suất xảy ra thiên tai trong một khoảng thời gian nhất định (ví dụ: 0–1).  
+- Là **đầu vào chính** cho mô hình đánh giá rủi ro.
 
+### 2.2. Vulnerability Data
+Dữ liệu thu thập và xử lý trong phần này gồm ba nhóm:
 
-Đây là breakdown chi tiết các task nhỏ cần thực hiện để hoàn thành module này.
-
-
-### 2.1. Giai đoạn 1: Thiết kế & Thiết lập
-* **1.1. Họp định nghĩa API (API Definition):**
-    * *Task:* Làm việc với Data Engineer và AI Dev 1 để chốt cấu trúc dữ liệu **Input** (chính xác các trường dữ liệu module sẽ nhận).
-    * *Task:* Làm việc với Algorithm Designer và UI/UX Dev để chốt cấu trúc dữ liệu **Output** (JSON response).
-* **1.2. Thiết lập Môi trường:**
-    * *Task:* Cài đặt môi trường Python (virtual environment).
-    * *Task:* Cài đặt framework API (ví dụ: FastAPI) để xây dựng module.
-    * *Task:* Cài đặt thư viện logic (ví dụ: `scikit-fuzzy`) để triển khai thuật toán.
-* **1.3. Thiết kế Cấu trúc Mã nguồn (Codebase):**
-    * *Task:* Tạo cấu trúc thư mục cho dự án (ví dụ: /rules, /models, /api).
-    * *Task:* Viết các lớp (class) hoặc module cơ sở cho dữ liệu Input và Output.
-
-
-### 2.2. Giai đoạn 2: Phát triển Thuật toán Rủi ro Cá nhân (Lớp 1)
-* **2.1. Rủi ro Địa lý (Geographical Risks):**
-    * *Task:* Viết logic cho **Sạt lở (Landslide)**, kết hợp `Input.Mưa` + `Input.Độ_dốc`.
-    * *Task:* Viết logic cho **Lũ quét (Flash Flood)**, kết hợp `Input.Mưa` + `Input.Khoảng_cách_sông`.
-    * *Task:* Viết logic cho **Ngập lụt (Inundation)**, kết hợp `Input.Mưa` + `Input.Vùng_trũng_GIS`.
-* **2.2. Rủi ro Khí tượng (Meteorological Risks):**
-    * *Task:* Viết logic cho **Gió giật (Wind Gust)**, dựa trên ngưỡng `Input.Tốc_độ_gió`.
-    * *Task:* Viết logic cho **Dông sét (Lightning)**, dựa trên `Input.API_Sét` (từ AI Dev 1 hoặc Data Engineer).
-    * *Task:* Viết logic cho **Nắng gắt (Heat Stroke)**, dựa trên `Input.Nhiệt_độ` và `Input.Độ_ẩm` (tính Heat Index).
-* **2.3. Rủi ro Sự kiện (Event-based Risks):**
-    * *Task:* Viết logic cho **Bão (Typhoon)**, dựa trên `Input.API_Bão.Nằm_trong_vùng` và `Input.API_Bão.Thời_gian`.
-    * *Task:* Viết logic cho **Động đất (Earthquake)**, dựa trên `Input.Vùng_nguy_cơ_địa_chấn_tĩnh`.
-
-
-### 2.3. Giai đoạn 3: Phát triển Thuật toán Tổng hợp (Lớp 2)
-* **3.1. Viết Thuật toán Ưu tiên (Priority Aggregator):**
-    * *Task:* Viết hàm (function) nhận đầu vào là 7 mức rủi ro (từ Giai đoạn 2).
-    * *Task:* Xác định mức rủi ro cao nhất (ví dụ: "Cao").
-    * *Task:* Trả về `Rủi_ro_Chung` và `Nguyên_nhân_Chính`.
-* **3.2. Chuẩn hóa "Safety Score":**
-    * *Task:* (Tùy chọn) Chuyển đổi các mức rủi ro thành một điểm số (ví dụ: Cao=10, Trung bình=5) nếu Algorithm Designer yêu cầu.
-
-
-### 2.4. Giai đoạn 4: API, Tích hợp & Kiểm thử
-* **4.1. Xây dựng API Endpoint:**
-    * *Task:* Tạo API endpoint (ví dụ: `POST /api/v1/evaluate-risk`) nhận tọa độ `(lat, lon)` và trả về đối tượng JSON Output đã thống nhất.
-* **4.2. Viết Kiểm thử Đơn vị (Unit Tests):**
-    * *Task:* Tạo các file test cho *từng* thuật toán rủi ro (Giai đoạn 2) với dữ liệu giả (dummy data) để đảm bảo logic (ví dụ: Mưa 150mm + Dốc 30° *phải* trả về "Cao").
-* **4.3. Tích hợp (Integration):**
-    * *Task:* Kết nối API của module với nguồn cấp dữ liệu *thật* từ Data Engineer và AI Dev 1.
-* **4.4. Viết Tài liệu (Documentation):**
-    * *Task:* Viết tài liệu API (ví dụ: Swagger/OpenAPI) để hướng dẫn Algorithm Designer và UI/UX Dev cách gọi và sử dụng API của module.
-
+| Nhóm yếu tố | Mô tả | Ví dụ dữ liệu |
+|--------------|-------|----------------|
+| **Dân cư (Population)** | Mật độ dân số, phân bố dân cư theo khu vực | người/km² |
+| **Cơ sở hạ tầng (Infrastructure)** | Số lượng, chất lượng công trình công cộng (trường, bệnh viện, cầu đường...) | chỉ số tổng hợp |
+| **Thiệt hại lịch sử (Historical Damage)** | Số lần và mức độ thiệt hại do thiên tai trước đây | chi phí thiệt hại, số người ảnh hưởng |
 
 ---
 
+## 3. Quy trình xử lý dữ liệu
 
-## 3. 🛠️ Công cụ & Công nghệ (Tools)
+### 3.1. Thu thập dữ liệu
+- Nguồn: Tổng cục Thống kê, OpenStreetMap, WorldPop, cơ quan phòng chống thiên tai.  
+- Dữ liệu được tập hợp theo từng vùng hành chính (quận, huyện hoặc tỉnh).
 
+### 3.2. Làm sạch và lọc
+- Loại bỏ dữ liệu trùng, thiếu hoặc sai định dạng.  
+- Kiểm tra và giới hạn ngoại lệ (outlier) bằng phương pháp z-score.  
+- Thống nhất đơn vị đo và tên cột dữ liệu.
 
-Danh sách các công cụ được đề xuất cho riêng task `ai-risk-evaluation`:
+### 3.3. Chuẩn hóa
+- Chuẩn hóa giá trị các yếu tố về **thang 0–1** hoặc **0–10** để dễ so sánh:
+  - `population_density_scaled = normalize(population_density)`
+  - `infrastructure_score_scaled = normalize(infrastructure_index)`
+- Tạo bảng dữ liệu đầu vào cuối cùng:
+`region_id, hazard_prob, population_density, infra_index, historical_damage`
 
+---
 
-* **Ngôn ngữ lập trình:** Python (v3.9+)
-* **Framework API:** FastAPI (Khuyến nghị do tốc độ cao và tự động tạo tài liệu API) hoặc Flask.
-* **Thư viện Logic:**
-    * `scikit-fuzzy`: Thư viện chính để triển khai Fuzzy Logic, giúp các quy tắc `IF-THEN` trở nên mềm dẻo (ví dụ: "mưa *hơi* lớn" VÀ "dốc *hơi* cao").
-    * `Pydantic`: Dùng chung với FastAPI để định nghĩa và xác thực (validate) mô hình dữ liệu Input/Output.
-* **Kiểm thử:** `pytest`
-* **Môi trường:** Docker (để đóng gói toàn bộ module logic thành một service độc lập).
-* **Quản lý Mã nguồn:** Git
+## 4. Mô hình đánh giá rủi ro
 
+### 4.1. Khái quát
+Mức độ rủi ro tổng hợp được xác định dựa trên hai thành phần:
+1. **Hazard Probability (H)** – xác suất thiên tai.  
+2. **Vulnerability (V)** – mức độ dễ bị tổn thương của khu vực.
+
+### 4.2. Tính Vulnerability
+Áp dụng mô hình hồi quy tuyến tính hoặc fuzzy logic để kết hợp các yếu tố:
+`Vulnerability = α1 * Population + α2 * Infrastructure + α3 * HistoricalDamage`
+Trong đó các hệ số α được xác định bằng quá trình huấn luyện hoặc chuyên gia gán trọng số.
+
+### 4.3. Tính Risk Score và Safety Score
+`RiskScore = β1 * HazardProbability + β2 * Vulnerability`
+`SafetyScore = 10 - RiskScore`
+Giá trị được chuẩn hóa về thang 0–10, trong đó:
+| SafetyScore | Mức độ an toàn |
+|--------------|----------------|
+| 0–3 | Nguy hiểm cao |
+| 4–6 | Trung bình |
+| 7–10 | An toàn |
+
+---
+
+## 5. Kiểm định và đánh giá mô hình
+
+- **Kiểm định chéo (Cross-validation)** để đảm bảo độ ổn định mô hình.  
+- **Đánh giá sai số:**  
+  - MAE (Mean Absolute Error)  
+  - RMSE (Root Mean Square Error)  
+- So sánh kết quả Safety Score với dữ liệu thực tế (thiệt hại, cảnh báo).
+
+---
+
+## 6. Công cụ và thư viện
+
+- **Python:** ngôn ngữ chính  
+- **Pandas / NumPy:** xử lý và chuẩn hóa dữ liệu  
+- **Scikit-learn:** hồi quy tuyến tính, chuẩn hóa dữ liệu  
+- **Matplotlib / Seaborn:** biểu đồ trực quan kết quả  
+- **GeoPandas (tuỳ chọn):** hiển thị kết quả theo bản đồ vùng  
+
+---
+
+## 7. Kết luận
+
+Mô hình này giúp đánh giá nhanh và khách quan **mức độ an toàn (Safety Score)** của từng khu vực dựa trên:
+- Xác suất thiên tai từ hệ thống nhận diện AI, và  
+- Mức độ dễ tổn thương được tính toán từ dữ liệu dân cư, hạ tầng và thiệt hại lịch sử.
+
+Kết quả có thể hỗ trợ cơ quan quản lý trong việc **phân vùng rủi ro**, **lên kế hoạch ứng phó**, hoặc **phân bổ nguồn lực phòng chống thiên tai**.
