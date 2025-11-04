@@ -1,3 +1,4 @@
+#  Nhóm 3
 #  Intelligent Travel Safety System: Weather and Disaster Warnings
 
 **Intelligent Travel Safety System (ITSS)** là một hệ thống tiên tiến sử dụng **Trí tuệ Nhân tạo (AI)** để cung cấp thông tin thời tiết và cảnh báo thiên tai theo thời gian thực cho khách du lịch. Mục tiêu là nâng cao **mức độ an toàn** và giúp người dùng đưa ra quyết định di chuyển thông minh.
