@@ -63,12 +63,12 @@ Mỗi giai đoạn là đầu vào bắt buộc cho giai đoạn tiếp theo, đ
 
 Tiến độ được nén chặt, tập trung vào việc tạo ra các thuật toán cốt lõi và tối ưu hiệu suất cho sản phẩm khả dụng tối thiểu (MVP).
 
-| Ngày | Mục tiêu Công việc | Hoạt động Trọng tâm (Focus Activities) | Deliverables (Kết quả) |
+| Ngày | Mục tiêu Công việc | Hoạt động Trọng tâm | Kết quả |
 | :--- | :--- | :--- | :--- |
-| **Day 1-2** | **Nền tảng & Lõi Phân loại (Task 1)** | Tích hợp base map (Mapbox). Xây dựng Risk Scoring Model (giả lập). Triển khai thuật toán tô màu **Jenks Natural Breaks**. | `01-Base-Map-Layer.js`<br>`02-Risk-Choropleth-Layer.js` (Bản thảo) |
-| **Day 3-4** | **Lõi Tính toán Vùng (Task 2)** | Triển khai 1 thuật toán vùng ảnh hưởng (ví dụ: **Buffer** đơn giản). Tích hợp API bão (giả lập) và render hình nón (polygon). | `03-Impact-Zone-Layer.js` (Bản thảo) |
-| **Day 5-6** | **Lõi Tối ưu Hiển thị (Task 3)** | Triển khai **Marker Clustering** (sử dụng plugin có sẵn của Mapbox/Leaflet để tăng tốc). Tối ưu hóa render POIs. | `04-Clustered-Marker-Layer.js` (Bản thảo) |
-| **Day 7** | **Tích hợp & Tạo mẫu (Prototype)** | Ghép 3 lớp (Choropleth, Impact Zone, Clustered Markers) chạy chung. Finalize code. Tạo **Merge Request (MR)**. | **Algorithm Prototype Sẵn sàng Merge.** |
+| **Ngày 1-2** | **Nền tảng & Lõi Phân loại (Task 1)** | Tích hợp base map (Mapbox). Xây dựng Risk Scoring Model (giả lập). Triển khai thuật toán tô màu **Jenks Natural Breaks**. | `01-Base-Map-Layer.js`<br>`02-Risk-Choropleth-Layer.js` (Bản thảo) |
+| **Ngày 3-4** | **Lõi Tính toán Vùng (Task 2)** | Triển khai 1 thuật toán vùng ảnh hưởng (ví dụ: **Buffer** đơn giản). Tích hợp API bão (giả lập) và render hình nón (polygon). | `03-Impact-Zone-Layer.js` (Bản thảo) |
+| **Ngày 5-6** | **Lõi Tối ưu Hiển thị (Task 3)** | Triển khai **Marker Clustering** (sử dụng plugin có sẵn của Mapbox/Leaflet để tăng tốc). Tối ưu hóa render POIs. | `04-Clustered-Marker-Layer.js` (Bản thảo) |
+| **Ngày 7** | **Tích hợp & Tạo mẫu (Prototype)** | Ghép 3 lớp (Choropleth, Impact Zone, Clustered Markers) chạy chung. Finalize code. Tạo **Merge Request (MR)**. | **Algorithm Prototype Sẵn sàng Merge.** |
 
 ---
 
