@@ -4,13 +4,13 @@
 
 **Phân nhánh (Git Branch):** `algorithm-safety-map(24127311)`
 
-**Trọng tâm Giai đoạn:** Algorithm Design & Performance Optimization (Thiết kế Thuật toán và Tối ưu Hiệu suất)
+**Trọng tâm Giai đoạn:** Thiết kế Thuật toán và Tối ưu Hiệu suất
 
 ---
 
-## 1. Định Nghĩa Vấn Đề (Problem Definition) - Góc nhìn Algorithm Designer
+## 1. Định Nghĩa Vấn Đề
 
-Vấn đề cốt lõi mà vai trò Algorithm Designer cần giải quyết là **Nguy cơ Quá tải Thông tin Thị giác (Visual Information Overload)** và **Rủi ro Phân vùng Sai lệch (Inaccurate Zoning Risk)**. Việc thiếu các thuật toán tối ưu và chính xác sẽ khiến người dùng không thể nhận diện được mối đe dọa thực sự, dẫn đến sự hoảng loạn (false positives) hoặc sự chủ quan (false negatives).
+Vấn đề cốt lõi mà vai trò Algorithm Designer cần giải quyết là **Nguy cơ Quá tải Thông tin Thị giác** và **Rủi ro Phân vùng Sai lệch**. Việc thiếu các thuật toán tối ưu và chính xác sẽ khiến người dùng không thể nhận diện được mối đe dọa thực sự, dẫn đến sự hoảng loạn hoặc sự chủ quan.
 
 ### 1.1. Các Rủi ro Kỹ thuật do Thiếu Thuật toán Tối ưu:
 
@@ -22,29 +22,28 @@ Vấn đề cốt lõi mà vai trò Algorithm Designer cần giải quyết là 
 
 ### 1.2. Mục tiêu Chiến lược của Vai trò Algorithm Designer:
 
-1.  **Chuyển đổi Dữ liệu:** Dịch thuật 100% dữ liệu GIS và API thô thành các lớp (layers) bản đồ trực quan **dễ hiểu trong 3 giây**.
+1.  **Chuyển đổi Dữ liệu:** Dịch thuật 100% dữ liệu GIS và API thô thành các lớp bản đồ trực quan **dễ hiểu trong 3 giây**.
 2.  **Đảm bảo Hiệu suất:** Tối ưu các thuật toán (clustering, classification) để đảm bảo thời gian tải và render bản đồ **dưới 2 giây** trên thiết bị di động, ngay cả với hàng ngàn điểm dữ liệu.
 3.  **Đảm bảo Chính xác:** Xây dựng các thuật toán (Jenks, Flood Fill, Clustering) phản ánh chính xác vùng ảnh hưởng thực tế và ưu tiên hiển thị các marker quan trọng nhất (POIs).
 
 ---
 
-## 2. Phân Tách Công Việc & Mối quan hệ Xử lý (Decomposition & Processing Pipeline)
+## 2. Phân Tách Công Việc & Mối quan hệ Xử lý
 
-Công việc của Algorithm Designer được phân tách thành 3 giai đoạn xử lý chính, tạo ra các đầu ra là các lớp dữ liệu (data layers) được chuẩn hóa để đưa lên Frontend. Các đầu ra này là sản phẩm thuật toán bắt buộc cho ứng dụng.
+Công việc của Algorithm Designer được phân tách thành 3 giai đoạn xử lý chính, tạo ra các đầu ra là các lớp dữ liệu được chuẩn hóa để đưa lên Frontend. Các đầu ra này là sản phẩm thuật toán bắt buộc cho ứng dụng.
 
-### 2.1. Giai đoạn 1: Phân loại & Chuẩn hóa (Data Classification)
-
+### 2.1. Giai đoạn 1: Phân loại & Chuẩn hóa
 | Tài liệu Output (Data Layer) | Kỹ thuật Thuật toán | Nhiệm vụ Chi tiết | Mục đích Trọng tâm |
 | :--- | :--- | :--- | :--- |
 | **Risk Score Grid (Lưới Điểm Rủi ro)** | **Risk Scoring Model**, **Data Classification (Jenks Natural Breaks, Quantiles)**. | Tính toán `RiskScore` cho mỗi ô lưới (grid cell) từ nhiều nguồn (địa hình, thời tiết, lịch sử). Chạy thuật toán Jenks để tìm 4-5 bậc rủi ro. | Chuẩn hóa đầu vào, tạo ra các **"bậc" rủi ro (Risk Levels)** có ý nghĩa thống kê để gán màu. |
 
-### 2.2. Giai đoạn 2: Tính toán Hình học (Geometric Computation)
+### 2.2. Giai đoạn 2: Tính toán Hình học
 
 | Tài liệu Output (Data Layer) | Kỹ thuật Thuật toán | Nhiệm vụ Chi tiết | Mối quan hệ Truy vết |
 | :--- | :--- | :--- | :--- |
 | **Impact Zone Polygons (GeoJSON)** | **DEM-based Flood Fill (BFS)**, **Concentric Buffering**, **Polygon Parsing**. | Xử lý dữ liệu DEM để tạo vùng ngập lụt. Phân tích API bão để trích xuất hình nón. Tạo buffer (vùng đệm) cho tâm chấn động đất. | **Kế thừa** các tham số (ví dụ: mực nước dâng, cường độ) từ **Risk Score Grid** (GĐ1) để xác định quy mô vùng ảnh hưởng. |
 
-### 2.3. Giai đoạn 3: Tối ưu Hiển thị (Display Optimization)
+### 2.3. Giai đoạn 3: Tối ưu Hiển thị
 
 | Tài liệu Output (Data Layer) | Kỹ thuật Thuật toán | Nhiệm vụ Chi tiết | Mối quan hệ Kế thừa |
 | :--- | :--- | :--- | :--- |
@@ -52,7 +51,7 @@ Công việc của Algorithm Designer được phân tách thành 3 giai đoạn
 
 ---
 
-### Mối quan hệ Xử lý (Processing Pipeline Flow)
+### Mối quan hệ Xử lý
 
 Mỗi giai đoạn là đầu vào bắt buộc cho giai đoạn tiếp theo, đảm bảo tính nhất quán từ dữ liệu thô đến hình ảnh trực quan:
 
@@ -60,11 +59,11 @@ Mỗi giai đoạn là đầu vào bắt buộc cho giai đoạn tiếp theo, đ
 
 * **Mục tiêu:** Đảm bảo rằng mọi **Lớp Bản đồ (Map Layer)** được hiển thị cho người dùng (ví dụ: vùng tô màu) đều có thể được truy vết ngược về một **Mô hình Điểm rủi ro (Risk Score Model)** cụ thể.
 
-## 3. Lịch Trình (Timeline) - Tối ưu hóa 4 Tuần (Cho MVP)
+## 3. Lịch Trình - Tối ưu hóa 4 Tuần (Cho MVP)
 
 Tiến độ được nén chặt, tập trung vào việc tạo ra các thuật toán cốt lõi và tối ưu hiệu suất cho sản phẩm khả dụng tối thiểu (MVP).
 
-| Tuần | Mục tiêu Công việc | Hoạt động Trọng tâm (Focus Activities) | Deliverables (Kết quả) |
+| Tuần | Mục tiêu Công việc | Hoạt động Trọng tâm  | Kết quả |
 | :--- | :--- | :--- | :--- |
 | **Tuần 1** | **Nền tảng & Dữ liệu Tĩnh** | Tích hợp base map (Mapbox/Leaflet). Hiển thị POIs tĩnh (chưa tối ưu). Xây dựng Risk Scoring Model (dùng dữ liệu giả lập). | `01-Base-Map-Layer.js` |
 | **Tuần 2** | **Lõi Phân vùng Rủi ro (Tasks 1 & 2)** | Triển khai thuật toán tô màu **Jenks Natural Breaks (Task 1)**. Triển khai 1 thuật toán vùng ảnh hưởng (ví dụ: **Buffer - Task 2**). | `02-Risk-Choropleth-Layer.js` |
@@ -73,7 +72,7 @@ Tiến độ được nén chặt, tập trung vào việc tạo ra các thuật
 
 ---
 
-## 4. Công Cụ và Kỹ Thuật (Tools & Workflow)
+## 4. Công Cụ và Kỹ Thuật
 
 ### 4.1. Công cụ Cốt lõi cho Thiết kế Thuật toán
 
@@ -81,7 +80,7 @@ Tiến độ được nén chặt, tập trung vào việc tạo ra các thuật
 * **Python (GeoPandas, Rasterio, Scikit-learn):** Backend để xử lý dữ liệu GIS nặng (tính toán vùng ngập lụt, phân loại Jenks, clustering DBSCAN).
 * **PostGIS (PostgreSQL Extension):** Cơ sở dữ liệu chuyên dụng để lưu trữ và thực hiện các truy vấn không gian (spatial queries) hiệu suất cao.
 
-### 4.2. Phương pháp Quản lý Mã nguồn (Using Git/GitHub)
+### 4.2. Phương pháp Quản lý Mã nguồn (Sử dụng Git/GitHub)
 
 * **Kiểm soát Phiên bản:** Sử dụng **Git** cho tất cả mã nguồn thuật toán (Python, JS).
 * **Tên Branch Chuẩn:** Luôn làm việc trên nhánh `algorithm-safety-map(24127311)`.
