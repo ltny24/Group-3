@@ -1,3 +1,4 @@
+# Nhóm 3
 #  Intelligent Travel Safety System: Weather and Disaster Warnings
 
 **Intelligent Travel Safety System (ITSS)** là một hệ thống tiên tiến sử dụng **Trí tuệ Nhân tạo (AI)** để cung cấp thông tin thời tiết và cảnh báo thiên tai theo thời gian thực cho khách du lịch. Mục tiêu là nâng cao **mức độ an toàn** và giúp người dùng đưa ra quyết định di chuyển thông minh.
@@ -126,8 +127,3 @@ Dưới đây là bảng phân công chi tiết vai trò, nhiệm vụ và branc
 | **5** | **Algorithm Designer** | `algorithm-safety-map(24127311)` | Thiết kế thuật toán phân vùng rủi ro thiên tai và hiển thị bản đồ | - Xây dựng thuật toán tô màu bản đồ theo mức độ rủi ro thiên tai.<br>- Tính toán bán kính ảnh hưởng của thiên tai (ví dụ: phạm vi bão hoặc lũ).<br>- Tối ưu hiển thị marker (bệnh viện, nơi trú ẩn, lãnh sự quán). |
 | **6** | **UI/UX Developer** | `uiux-safety-interface(24127082)` | Thiết kế giao diện và trải nghiệm người dùng cho app | - Tạo mockup/Prototype cho: **Interactive Safety Map**, **Disaster & Weather Alert Hub**, **Quick SOS Screen**.<br>- Thực hiện responsive design & dark mode.<br>- Kết nối frontend với API cảnh báo. |
 | **7** | **Testing Lead** | `testing-and-qc(24127586)` | Đảm bảo chất lượng, kiểm thử tích hợp và hiệu năng | - Viết **test case** cho từng module.<br>- Thực hiện **integration test** giữa các API cảnh báo & bản đồ.<br>- Kiểm thử **hiệu năng & stress test** khi có nhiều người nhận cảnh báo cùng lúc.<br>- Báo cáo bug qua Jira/GitHub Issues. |
-
-
-
-
-
