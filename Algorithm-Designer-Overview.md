@@ -59,16 +59,16 @@ Mỗi giai đoạn là đầu vào bắt buộc cho giai đoạn tiếp theo, đ
 
 * **Mục tiêu:** Đảm bảo rằng mọi **Lớp Bản đồ (Map Layer)** được hiển thị cho người dùng (ví dụ: vùng tô màu) đều có thể được truy vết ngược về một **Mô hình Điểm rủi ro (Risk Score Model)** cụ thể.
 
-## 3. Lịch Trình - Tối ưu hóa 4 Tuần (Cho MVP)
+## 3. Lịch Trình - Tối ưu hóa trong 1 Tuần (Cho MVP)
 
 Tiến độ được nén chặt, tập trung vào việc tạo ra các thuật toán cốt lõi và tối ưu hiệu suất cho sản phẩm khả dụng tối thiểu (MVP).
 
-| Tuần | Mục tiêu Công việc | Hoạt động Trọng tâm  | Kết quả |
+| Ngày | Mục tiêu Công việc | Hoạt động Trọng tâm (Focus Activities) | Deliverables (Kết quả) |
 | :--- | :--- | :--- | :--- |
-| **Tuần 1** | **Nền tảng & Dữ liệu Tĩnh** | Tích hợp base map (Mapbox/Leaflet). Hiển thị POIs tĩnh (chưa tối ưu). Xây dựng Risk Scoring Model (dùng dữ liệu giả lập). | `01-Base-Map-Layer.js` |
-| **Tuần 2** | **Lõi Phân vùng Rủi ro (Tasks 1 & 2)** | Triển khai thuật toán tô màu **Jenks Natural Breaks (Task 1)**. Triển khai 1 thuật toán vùng ảnh hưởng (ví dụ: **Buffer - Task 2**). | `02-Risk-Choropleth-Layer.js` |
-| **Tuần 3** | **Tối ưu Marker & Dữ liệu Động (Tasks 2 & 3)** | Triển khai **Marker Clustering (Task 3)**. Tích hợp API bão và render hình nón dự báo (Task 2). | `03-Clustered-Marker-Layer.js` |
-| **Tuần 4** | **Hoàn thiện & Tối ưu Hiệu suất** | Triển khai **Marker Decluttering/Prioritization (Task 3)**. Tối ưu hiệu suất (sử dụng vector tiles). Finalize và tạo **Merge Request (MR)**. | **Algorithm MVP Sẵn sàng Merge.** |
+| **Day 1-2** | **Nền tảng & Lõi Phân loại (Task 1)** | Tích hợp base map (Mapbox). Xây dựng Risk Scoring Model (giả lập). Triển khai thuật toán tô màu **Jenks Natural Breaks**. | `01-Base-Map-Layer.js`<br>`02-Risk-Choropleth-Layer.js` (Bản thảo) |
+| **Day 3-4** | **Lõi Tính toán Vùng (Task 2)** | Triển khai 1 thuật toán vùng ảnh hưởng (ví dụ: **Buffer** đơn giản). Tích hợp API bão (giả lập) và render hình nón (polygon). | `03-Impact-Zone-Layer.js` (Bản thảo) |
+| **Day 5-6** | **Lõi Tối ưu Hiển thị (Task 3)** | Triển khai **Marker Clustering** (sử dụng plugin có sẵn của Mapbox/Leaflet để tăng tốc). Tối ưu hóa render POIs. | `04-Clustered-Marker-Layer.js` (Bản thảo) |
+| **Day 7** | **Tích hợp & Tạo mẫu (Prototype)** | Ghép 3 lớp (Choropleth, Impact Zone, Clustered Markers) chạy chung. Finalize code. Tạo **Merge Request (MR)**. | **Algorithm Prototype Sẵn sàng Merge.** |
 
 ---
 
