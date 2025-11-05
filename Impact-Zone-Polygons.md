@@ -77,3 +77,67 @@ Phương pháp tính toán **phụ thuộc hoàn toàn** vào bản chất của
 
 * **Công cụ Database (Khuyến nghị):**
     * **PostGIS (PostgreSQL Extension):** Cực kỳ mạnh mẽ. Có thể lưu trữ và thực hiện các hàm này trực tiếp trong CSDL (ví dụ: `ST_Buffer`, `ST_Clip`, `ST_AsGeoJSON`).
+## 4. Ví dụ về code
+Đoạn code này minh họa cách mô phỏng và xác định vùng ngập lụt (Flood Zone) dựa trên mô hình độ cao DEM (Digital Elevation Model) và thuật toán Flood Fill.
+Trong hệ thống Impact Zone Polygon, kết quả của hàm này giúp xác định:
+  * Các khu vực bị ngập khi mực nước dâng lên (nguy cơ cao)
+  * Phân vùng rủi ro theo địa hình, làm đầu vào để tính chỉ số Risk Score
+    cho các vùng dân cư, cơ sở hạ tầng, hoặc khu công nghiệp.
+```python
+import numpy as np
+from skimage.segmentation import flood_fill
+
+def calculate_flood_zone():
+    """
+    Tính toán vùng ngập lụt bằng DEM-based Flood Fill.
+    """
+    
+    # 1. Mô phỏng Lưới Độ cao (DEM Grid)
+    # (Ngoài đời thực, bạn sẽ tải từ file GeoTIFF bằng 'rasterio')
+    # 10 là núi, 1 là sông/biển
+    dem_grid = np.array([
+        [10, 10, 10, 10, 10, 10, 10],
+        [10, 8,  5,  4,  3,  1,  1], # Sông/biển ở [1, 6]
+        [10, 7,  5,  3,  2,  1,  1], # Sông/biển ở [2, 6]
+        [10, 6,  4,  2,  3,  5,  10],
+        [10, 5,  3,  2,  4,  10, 10],# Vùng trũng bị cô lập ở [4, 3] (giá trị 2)
+        [10, 10, 10, 10, 10, 10, 10]
+    ])
+    
+    # 2. Định nghĩa tham số
+    water_level = 4.5  # Mực nước dâng 4.5 mét
+    seed_point = (2, 6) # Điểm bắt đầu (hạt giống) từ con sông
+
+    # 3. Bước A: Tạo Mặt nạ Tiềm năng ("Bathtub Model")
+    # Lấy tất cả các ô có độ cao < mực nước
+    potential_mask = dem_grid < water_level
+    
+    print("Mặt nạ Tiềm năng (Bathtub Mask):")
+    print(potential_mask.astype(int))
+    # Lưu ý: Ô [4, 3] (vùng trũng) là 1 (True)
+    
+    # 4. Bước B: Tạo Mặt nạ Thực tế (Flood Fill)
+    # Bắt đầu từ 'seed_point', "tô màu" tất cả các ô True
+    # liền kề trong 'potential_mask'.
+    # Nó sẽ KHÔNG tô được đến ô [4, 3] vì nó bị chặn
+    # bởi các ô có giá trị >= 4.5 (ví dụ: [3, 5] và [4, 4]).
+    
+    actual_flood_mask = flood_fill(
+        potential_mask.astype(int), # Input phải là integer
+        seed_point,
+        new_value=2 # Tô màu vùng ngập lụt bằng giá trị 2
+    )
+
+    print("\nMặt nạ Ngập lụt Thực tế (Actual Flood Mask):")
+    print(actual_flood_mask)
+    # Kết quả: Ô [4, 3] vẫn là 1 (True), không phải 2 (Flooded)
+    
+    # Bước cuối cùng (không có trong code) là "vector hóa" 
+    # (vectorize) mảng 'actual_flood_mask == 2' này 
+    # để tạo ra một GeoJSON Polygon.
+    
+    return actual_flood_mask == 2
+
+# Chạy ví dụ
+flood_zone = calculate_flood_zone()
+```

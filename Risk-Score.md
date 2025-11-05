@@ -113,3 +113,67 @@ Bước cuối cùng là chuyển đổi điểm số (ví dụ: 0.585) thành c
     * **Numpy:** Để thực hiện các phép tính công thức (Bước 4) nhanh chóng trên toàn bộ lưới (vectorized operations).
 * **Database:**
     * **PostGIS (PostgreSQL Extension):** Để lưu trữ các lớp dữ liệu tĩnh (độ cao, lịch sử) và thực hiện các truy vấn không gian phức tạp.
+## 4. Ví dụ về code
+
+```python
+import numpy as np
+
+def calculate_risk_score_grid():
+    """
+    Tính toán lưới điểm rủi ro (Risk Score Grid) bằng NumPy.
+    """
+    
+    # 1. Định nghĩa Trọng số (Weights)
+    # Các trọng số này phải có tổng bằng 1.0
+    WEIGHTS = {
+        'storm_proximity': 0.4,
+        'flood_alert': 0.3,
+        'elevation': 0.15,
+        'history': 0.1,
+        'coast_proximity': 0.05
+    }
+
+    # 2. Tải các Lớp dữ liệu (Data Layers)
+    # Giả sử chúng ta đã tải và CHUẨN HÓA (normalized) 
+    # tất cả các lớp dữ liệu thành các mảng NumPy 2D (grid).
+    # Mọi giá trị trong các mảng này đều nằm trong khoảng 0.0 đến 1.0.
+    
+    # Ở đây, chúng ta sẽ mô phỏng (simulate) dữ liệu
+    grid_shape = (1000, 1000) # Bản đồ là một lưới 1000x1000
+    
+    # 0.8 (gần), 0.1 (xa)
+    layer_storm = np.random.rand(*grid_shape) 
+    # 1.0 (có cảnh báo), 0.0 (không)
+    layer_flood = np.random.randint(0, 2, size=grid_shape).astype(float) 
+    # 1.0 (thấp, nguy hiểm), 0.0 (cao, an toàn)
+    layer_elevation = np.random.rand(*grid_shape) 
+    # 1.0 (lịch sử tồi tệ), 0.0 (an toàn)
+    layer_history = np.random.rand(*grid_shape) 
+    # 1.0 (gần bờ biển), 0.0 (xa)
+    layer_coast = np.random.rand(*grid_shape) 
+
+    
+    # 3. Tính toán Tổng có Trọng số (Weighted Sum)
+    # Đây là lõi thuật toán. NumPy thực hiện phép nhân và cộng
+    # trên toàn bộ 1,000,000 ô (1000x1000) ngay lập tức.
+    
+    risk_score_grid = (
+        WEIGHTS['storm_proximity'] * layer_storm +
+        WEIGHTS['flood_alert']   * layer_flood +
+        WEIGHTS['elevation']     * layer_elevation +
+        WEIGHTS['history']       * layer_history +
+        WEIGHTS['coast_proximity'] * layer_coast
+    )
+
+    # risk_score_grid bây giờ là một mảng 2D (1000x1000), 
+    # mỗi ô chứa một điểm rủi ro (ví dụ: 0.585).
+    # Bước tiếp theo là dùng thuật toán Jenks để phân loại lưới này.
+    
+    print(f"Kích thước lưới Risk Score: {risk_score_grid.shape}")
+    print(f"Điểm rủi ro tại ô (500, 500): {risk_score_grid[500, 500]:.4f}")
+    
+    return risk_score_grid
+
+# Chạy ví dụ
+risk_grid = calculate_risk_score_grid()
+```

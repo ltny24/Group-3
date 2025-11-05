@@ -97,3 +97,88 @@ Mục tiêu của pipeline là nhận **hàng ngàn** điểm dữ liệu thô (
 * **Frontend (Pipeline Giai đoạn 1-4):**
     * **Mapbox GL JS:** Hỗ trợ **toàn bộ pipeline** (Giai đoạn 1-4) một cách tự nhiên (native). Nó tự động xử lý việc tải MVT, phân cụm (clustering), và khử chồng chéo (collision detection) dựa trên thuộc tính `priority` mà chúng ta cung cấp.
     * **Leaflet:** Yêu cầu plugin bên ngoài (ví dụ: `Leaflet.markercluster`) để xử lý Giai đoạn 2 (Clustering), nhưng việc khử chồng chéo (Giai đoạn 3) phức tạp hơn và không hiệu quả bằng Mapbox.
+## 5. Ví dụ về code
+Đoạn code này minh họa cách hiển thị các điểm dữ liệu (POI)
+ trên bản đồ Mapbox theo cơ chế gom cụm (clustering) và 
+ ưu tiên hiển thị (prioritization). Cụ thể:
+   * Khi người dùng zoom xa, các điểm gần nhau sẽ được gom lại thành một cụm.
+   * Khi zoom gần, các điểm sẽ tách ra và được hiển thị riêng lẻ.
+   * Nếu nhiều điểm chồng lấn, thuộc tính "priority" sẽ quyết định điểm nào
+     được hiển thị — điểm có priority thấp (ví dụ: 1) sẽ được ưu tiên hơn.
+
+ **Ứng dụng:**
+    Giúp bản đồ hiển thị rõ ràng hơn khi có nhiều POI,
+      đồng thời nhấn mạnh các điểm quan trọng như bệnh viện,
+      trạm cứu hộ, hoặc các khu vực có rủi ro cao.
+```javascript
+// Giả sử đã có một đối tượng 'map' của Mapbox 
+// và một 'all_points_geojson' (đây là 1 file GeoJSON 
+// chứa TẤT CẢ các POI).
+
+// Mỗi 'feature' trong GeoJSON nên có 1 property 'priority'
+// ví dụ: { "type": "Feature", "properties": { "priority": 1, ... } }
+
+function setupClusterAndPriority(map, all_points_geojson) {
+
+    // --- GIAI ĐOẠN 1: THÊM NGUỒN DỮ LIỆU ---
+    // Mapbox sẽ tự động xử lý toàn bộ thuật toán clustering
+    // (sử dụng Supercluster) ở chế độ nền.
+    map.addSource('all-pois-source', {
+        type: 'geojson',
+        data: all_points_geojson,
+        cluster: true, // Bật chế độ gom cụm
+        clusterMaxZoom: 14, // Zoom tối đa để gom cụm
+        clusterRadius: 50   // Bán kính mỗi cụm (pixels)
+    });
+
+    // --- GIAI ĐOẠN 2: VẼ CÁC CỤM (CLUSTERS) ---
+    // Layer này chỉ vẽ các hình tròn và số 
+    // cho các đối tượng CÓ 'point_count' (tức là cụm)
+    map.addLayer({
+        id: 'clusters-layer',
+        type: 'circle', // Vẽ hình tròn
+        source: 'all-pois-source',
+        filter: ['has', 'point_count'], // Chỉ áp dụng cho cụm
+        paint: {
+            'circle-color': '#51bbd6',
+            'circle-radius': 20
+        }
+    });
+
+    map.addLayer({
+        id: 'cluster-count-layer',
+        type: 'symbol', // Vẽ text (số)
+        source: 'all-pois-source',
+        filter: ['has', 'point_count'],
+        layout: {
+            'text-field': '{point_count_abbreviated}', // Lấy số lượng
+            'text-size': 12
+        }
+    });
+
+    // --- GIAI ĐOẠN 3: VẼ MARKER ĐƠN (ĐÃ ƯU TIÊN) ---
+    // Layer này chỉ vẽ các điểm KHÔNG có 'point_count'
+    // (tức là các marker đơn lẻ).
+    map.addLayer({
+        id: 'unclustered-point-layer',
+        type: 'symbol',
+        source: 'all-pois-source',
+        filter: ['!', ['has', 'point_count']], // '!' = NOT
+        layout: {
+            'icon-image': 'hospital-icon', // Tên icon đã load
+            
+            // --- PHẦN ƯU TIÊN (PRIORITIZATION) ---
+            
+            // 1. Chống chồng chéo (Declutter)
+            'icon-allow-overlap': false,
+            'icon-ignore-placement': false,
+            
+            // 2. Sắp xếp ưu tiên (Sort Key)
+            // Đọc 'priority' từ properties của GeoJSON.
+            // Mapbox sẽ ưu tiên vẽ các điểm có 'priority' thấp (ví dụ: 1)
+            // và ẩn đi các điểm có 'priority' cao (ví dụ: 10) nếu chúng chồng lấn.
+            'symbol-sort-key': ['get', 'priority'] 
+        }
+    });
+}
+```
