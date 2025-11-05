@@ -114,7 +114,19 @@ Bước cuối cùng là chuyển đổi điểm số (ví dụ: 0.585) thành c
 * **Database:**
     * **PostGIS (PostgreSQL Extension):** Để lưu trữ các lớp dữ liệu tĩnh (độ cao, lịch sử) và thực hiện các truy vấn không gian phức tạp.
 ## 4. Ví dụ về code
+Đoạn code này minh họa cách tính toán "Risk Score Grid"
+ — một bản đồ dạng lưới (grid map) mô tả mức độ rủi ro cho từng vùng.
 
+ **Ý tưởng chính:**
+   - Mỗi ô (cell) trong lưới đại diện cho một khu vực địa lý nhỏ.
+   - Các lớp dữ liệu (layers) như bão, ngập lụt, địa hình, lịch sử thiên tai,
+    và khoảng cách tới bờ biển được tổng hợp lại bằng công thức có trọng số.
+   - Kết quả là một bản đồ 2D (1000x1000), trong đó mỗi ô chứa điểm rủi ro
+     (risk score) từ 0.0 đến 1.0 — càng cao thì nguy cơ càng lớn.
+
+ **Ứng dụng:** Đây là phần cốt lõi trong hệ thống Risk Score, giúp xác định
+     khu vực nào có nguy cơ cao để hỗ trợ cảnh báo, quy hoạch, 
+     hoặc phản ứng khẩn cấp.
 ```python
 import numpy as np
 
