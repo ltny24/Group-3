@@ -190,93 +190,19 @@ Biểu đồ Use Case mô tả toàn bộ các tác nhân và chức năng của
 | **UC22** | Ghi log & theo dõi lỗi hệ thống | Monitoring | System / Admin | Ghi nhận toàn bộ log hoạt động, lỗi và hiệu suất dịch vụ. |
 
 ---
+## IX. SƠ ĐỒ MÔ HÌNH DỮ LIỆU (ER DIAGRAM)
+Biểu đồ ER dưới đây mô tả **cấu trúc dữ liệu và mối quan hệ giữa các thực thể** trong hệ thống *Intelligent Travel Safety System with Weather & Disaster Warnings*.  
+Hệ thống được chia thành ba module chính:
 
-## IX. SƠ ĐỒ ERD TRỰC QUAN (ENTITY RELATIONSHIP DIAGRAM)
+- **Module 1 – User Management & Roles:** Quản lý người dùng, phân quyền và thông tin vị trí.  
+- **Module 2 – Emergency Assistance & Safety Map:** Lưu vị trí an toàn, danh bạ khẩn cấp, và báo cáo sự cố.  
+- **Module 3 – Alerting, Risk Assessment & AI:** Xử lý cảnh báo, tính toán điểm an toàn, và quản lý mô hình AI.
 
-erDiagram
-    %% MODULE 1: User Management & Roles
-    USER ||--|{ ROLE : "có_một"
-    USER {
-        string user_id PK
-        string username
-        string email
-        string password_hash
-        boolean mfa_enabled
-        string current_location_geom (PostGIS)
-    }
-    ROLE {
-        string role_id PK
-        string role_name (Public, Responder, Admin)
-    }
+---
 
-    %% MODULE 2: Emergency Assistance & Safety Map
-    USER ||--o{ SAVED_LOCATION : "lưu"
-    USER ||--o{ SOS_CONTACT : "gồm"
-    INCIDENT_REPORT ||--|{ USER : "báo cáo bởi"
-    POI ||--o{ ALERT_EVENT : "gần"
-    
-    SAVED_LOCATION {
-        string location_id PK
-        string name
-        point location_geom (PostGIS)
-    }
-    SOS_CONTACT {
-        string contact_id PK
-        string phone_number
-        string contact_name
-    }
-    POI {
-        string poi_id PK
-        string name
-        string type (Shelter, Hospital, Police)
-        point location_geom (PostGIS)
-        string admin_verified
-    }
-    INCIDENT_REPORT {
-        string report_id PK
-        string reporter_user_id FK
-        string incident_type
-        text description
-        point location_geom (PostGIS)
-        string validation_status (Pending, Verified)
-        datetime created_at
-    }
+![ER Diagram - Intelligent Travel Safety System](./images/diagram.png)
+*Hình 9.1 – Biểu đồ ER mô tả cấu trúc dữ liệu chính của hệ thống*
 
-    %% MODULE 3: Alerting, Risk Assessment & AI
-    ALERT_EVENT ||--o{ USER_ALERT_STATUS : "tác động"
-    ALERT_EVENT ||--|{ ALERT_RULE : "dựa_trên"
-    ALERT_EVENT ||--o{ SAFETY_SCORE : "tham chiếu score_id"
-    SAFETY_SCORE ||--|{ AI_MODEL_VERSION : "phiên bản_tính_toán"
-    
-    ALERT_EVENT {
-        string event_id PK
-        string alert_type
-        string severity_level
-        geojson polygon_geojson (Vùng ảnh hưởng)
-        datetime timestamp
-        string source (Official/Crowdsourced)
-    }
-    ALERT_RULE {
-        string rule_id PK
-        string risk_factor
-        float threshold_value
-        string geographic_area
-        string admin_user_id FK
-    }
-    SAFETY_SCORE {
-        string score_id PK
-        float score_value
-        string risk_level (High, Medium, Low)
-        string geospatial_key (Location hash)
-    }
-    AI_MODEL_VERSION {
-        string version_id PK
-        string model_name (Disaster Detection/Risk Evaluation)
-        datetime deployed_at
-        float accuracy_metric
-    }
-    USER_ALERT_STATUS {
-        string status_id PK
-        string user_id FK
-        boolean acknowledged
-    }
+---
+
+
