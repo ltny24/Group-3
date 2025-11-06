@@ -146,60 +146,137 @@ Tất cả các microservice từ **A-02 đến A-07** đẩy log về hệ th�
 
 ## VIII. SƠ ĐỒ USE CASE (USE CASE DIAGRAM)
 
-###  Use Case Chính
-- **UC1 – Đăng nhập / Xác thực**
-- **UC2 – Nhận cảnh báo an toàn**
-- **UC3 – Gửi yêu cầu SOS**
-- **UC4 – Quản lý vị trí yêu thích**
-- **UC5 – Xem bản đồ an toàn**
-- **UC6 – Cập nhật mô hình AI (Admin)**
+Biểu đồ Use Case mô tả toàn bộ các tác nhân và chức năng của hệ thống **Intelligent Travel Safety System with Weather & Disaster Warnings**, thể hiện sự tương tác giữa:
+- Người dùng (Public User)
+- Quản trị viên (Admin/System Operator)
+- Cơ quan cứu hộ (Emergency Responder)
+- Nhà cung cấp dữ liệu (External Data Provider)
+- Dịch vụ xác thực / gửi thông báo ngoài (External Auth & Notification Services)
 
-```mermaid
-flowchart TD
-    User(["Người dùng"]) -->|UC1| DangNhap["Đăng nhập / Xác thực"]
-    User -->|UC2| CanhBao["Nhận cảnh báo an toàn"]
-    User -->|UC3| SOS["Gửi yêu cầu SOS"]
-    User -->|UC4| ViTri["Quản lý vị trí yêu thích"]
-    User -->|UC5| BanDo["Xem bản đồ an toàn"]
+---
 
-    Admin(["Quản trị viên"]) -->|UC6| AI["Cập nhật mô hình AI"]
+### 🔹 Biểu đồ tổng thể
 
-    ExternalAPI(["Hệ thống ngoài"]) -->|>| Data["Cung cấp dữ liệu thời tiết / thiên tai"]
-```
+![Use Case Diagram - Detailed](./images/usecase.png)
+*Hình 8.1 – Biểu đồ Use Case chi tiết của hệ thống Intelligent Travel Safety System*
+
+---
+
+### 🔸 Danh sách Use Case chi tiết (22 mục)
+
+| Mã UC | Tên Use Case | Nhóm module | Actor liên quan | Mô tả ngắn gọn |
+|:------:|---------------|---------------|-----------------|----------------|
+| **UC01** | Đăng ký tài khoản | User Management | Public User | Người dùng tạo tài khoản mới để sử dụng hệ thống. |
+| **UC02** | Đăng nhập / Xác thực (MFA) | User Management | Public User / Auth Service | Đăng nhập hệ thống, xác thực bằng MFA để đảm bảo an toàn. |
+| **UC03** | Cập nhật hồ sơ cá nhân | User Management | Public User | Người dùng chỉnh sửa thông tin cá nhân, email, số điện thoại. |
+| **UC04** | Lưu vị trí yêu thích | User Management | Public User | Lưu các địa điểm thường lui tới để theo dõi rủi ro. |
+| **UC05** | Nhận cảnh báo an toàn | Alert & Notification | Public User | Nhận thông báo tự động về thiên tai hoặc khu vực rủi ro gần vị trí hiện tại. |
+| **UC06** | Xem bản đồ an toàn | Safety Map & Visualization | Public User | Hiển thị bản đồ với các vùng rủi ro, trạm trú ẩn, tuyến đường an toàn. |
+| **UC07** | Gửi yêu cầu SOS | Emergency Assistance | Public User | Gửi tín hiệu khẩn cấp và vị trí đến trung tâm cứu hộ. |
+| **UC08** | Gửi định vị GPS (tự động) | Emergency Assistance | Public User | Tự động gửi vị trí GPS theo chu kỳ khi bật chế độ khẩn cấp. |
+| **UC09** | Báo cáo sự cố địa phương | Incident Reporting | Public User | Báo cáo tình huống nguy hiểm hoặc thiên tai tại khu vực. |
+| **UC10** | Kiểm tra trạng thái cảnh báo | Alert Hub | Public User | Xem lịch sử cảnh báo, mức độ nguy hiểm và thời gian cập nhật. |
+| **UC11** | Tra cứu hướng dẫn an toàn ngoại tuyến | Safety Map & Offline Mode | Public User | Xem hướng dẫn ứng phó khi không có Internet. |
+| **UC12** | Gửi cảnh báo đến trung tâm cứu hộ | SOS / Emergency Dispatch | System / Emergency Responder | Hệ thống tự động chuyển cảnh báo SOS đến đội cứu hộ qua SMS/API. |
+| **UC13** | Phản hồi SOS | Emergency Response | Emergency Responder | Trung tâm cứu hộ xác nhận và phản hồi lại tình trạng hỗ trợ. |
+| **UC14** | Giám sát cảnh báo hệ thống | Admin & Monitoring | Admin | Theo dõi số lượng cảnh báo, log hoạt động và trạng thái dịch vụ. |
+| **UC15** | Quản lý người dùng | Admin & Monitoring | Admin | Thêm, khóa, hoặc chỉnh sửa tài khoản người dùng. |
+| **UC16** | Quản lý dữ liệu thiên tai / an toàn | Data Management | Admin | Quản lý dữ liệu vùng nguy hiểm, khu trú ẩn, và dữ liệu bản đồ. |
+| **UC17** | Cập nhật mô hình AI | AI Engine Management | Admin | Tải lên mô hình AI mới, triển khai và kiểm thử phiên bản. |
+| **UC18** | Giám sát độ chính xác mô hình | AI Engine Monitoring | Admin | Xem thống kê độ chính xác, false positive/negative của mô hình AI. |
+| **UC19** | Nhận dữ liệu thời tiết / thiên tai | Data Integration | External Data Provider | Gửi dữ liệu từ OpenWeather, NOAA, hoặc nguồn chính thức khác. |
+| **UC20** | Xác thực dữ liệu nguồn | Alert Hub | System / Admin | Kiểm tra độ tin cậy và tính hợp lệ của dữ liệu nhận được. |
+| **UC21** | Gửi thông báo ra ngoài (Push/SMS/Email) | Notification Service | System / External Notification API | Gửi thông báo khẩn cấp đến người dùng qua nhiều kênh. |
+| **UC22** | Ghi log & theo dõi lỗi hệ thống | Monitoring | System / Admin | Ghi nhận toàn bộ log hoạt động, lỗi và hiệu suất dịch vụ. |
+
+---
 
 ## IX. SƠ ĐỒ ERD TRỰC QUAN (ENTITY RELATIONSHIP DIAGRAM)
 
-```mermaid
 erDiagram
-    USER ||--o{ SAVED_LOCATION : "lưu"
-    USER ||--o{ SOS_CONTACT : "gồm"
-    USER ||--o{ USER_ALERT_STATUS : "nhận"
-    ALERT_EVENT ||--o{ USER_ALERT_STATUS : "tác động"
-    ALERT_EVENT ||--|| SAFETY_SCORE : "tham chiếu location_hash"
-    AI_MODEL_VERSION ||--o{ SAFETY_SCORE : "phiên bản"
-    
+    %% MODULE 1: User Management & Roles
+    USER ||--|{ ROLE : "có_một"
     USER {
-        string user_id
+        string user_id PK
         string username
         string email
+        string password_hash
+        boolean mfa_enabled
+        string current_location_geom (PostGIS)
     }
+    ROLE {
+        string role_id PK
+        string role_name (Public, Responder, Admin)
+    }
+
+    %% MODULE 2: Emergency Assistance & Safety Map
+    USER ||--o{ SAVED_LOCATION : "lưu"
+    USER ||--o{ SOS_CONTACT : "gồm"
+    INCIDENT_REPORT ||--|{ USER : "báo cáo bởi"
+    POI ||--o{ ALERT_EVENT : "gần"
+    
     SAVED_LOCATION {
-        string location_id
-        float latitude
-        float longitude
-    }
-    ALERT_EVENT {
-        string event_id
-        string severity_level
-        geojson polygon_geojson
-    }
-    SAFETY_SCORE {
-        string score_id
-        float score_value
+        string location_id PK
+        string name
+        point location_geom (PostGIS)
     }
     SOS_CONTACT {
-        string contact_id
+        string contact_id PK
         string phone_number
+        string contact_name
     }
-```
+    POI {
+        string poi_id PK
+        string name
+        string type (Shelter, Hospital, Police)
+        point location_geom (PostGIS)
+        string admin_verified
+    }
+    INCIDENT_REPORT {
+        string report_id PK
+        string reporter_user_id FK
+        string incident_type
+        text description
+        point location_geom (PostGIS)
+        string validation_status (Pending, Verified)
+        datetime created_at
+    }
 
+    %% MODULE 3: Alerting, Risk Assessment & AI
+    ALERT_EVENT ||--o{ USER_ALERT_STATUS : "tác động"
+    ALERT_EVENT ||--|{ ALERT_RULE : "dựa_trên"
+    ALERT_EVENT ||--o{ SAFETY_SCORE : "tham chiếu score_id"
+    SAFETY_SCORE ||--|{ AI_MODEL_VERSION : "phiên bản_tính_toán"
+    
+    ALERT_EVENT {
+        string event_id PK
+        string alert_type
+        string severity_level
+        geojson polygon_geojson (Vùng ảnh hưởng)
+        datetime timestamp
+        string source (Official/Crowdsourced)
+    }
+    ALERT_RULE {
+        string rule_id PK
+        string risk_factor
+        float threshold_value
+        string geographic_area
+        string admin_user_id FK
+    }
+    SAFETY_SCORE {
+        string score_id PK
+        float score_value
+        string risk_level (High, Medium, Low)
+        string geospatial_key (Location hash)
+    }
+    AI_MODEL_VERSION {
+        string version_id PK
+        string model_name (Disaster Detection/Risk Evaluation)
+        datetime deployed_at
+        float accuracy_metric
+    }
+    USER_ALERT_STATUS {
+        string status_id PK
+        string user_id FK
+        boolean acknowledged
+    }
