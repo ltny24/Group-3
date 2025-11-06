@@ -62,8 +62,57 @@ Phương pháp tính toán **phụ thuộc hoàn toàn** vào bản chất của
         * *Ví dụ:* Độ lớn 7.0 => Vùng Nguy hiểm (Đỏ) = 15km; Vùng Cảnh báo (Cam) = 50km.
     3.  **Thực thi (Backend):** Sử dụng một hàm GIS chuẩn (ví dụ `ST_Buffer()` trong PostGIS hoặc `buffer()` trong GeoPandas).
     4.  **Kết quả (Output):** Tạo ra các `Polygon` hình tròn đồng tâm (concentric polygons) thể hiện các mức độ ảnh hưởng (rung chấn) khác nhau.
-
 ---
+### 2.4. Các phương pháp Xác định Bán kính vùng ảnh hưởng
+Để xác định bán kính cho Vùng đệm (Buffer), hệ thống không dùng một con số ngẫu nhiên mà phải dựa trên một trong hai mô hình tính toán chính, tùy thuộc vào độ phức tạp và độ chính xác yêu cầu.
+
+**A. Phương pháp 1: Bảng tra cứu**
+
+Đây là phương pháp đơn giản, nhanh và phổ biến nhất, sử dụng các quy tắc nghiệp vụ được định nghĩa trước. Thuật toán không tính toán động mà chỉ tra cứu một bảng đã được thiết lập.
+
+**Logic**: Hệ thống duy trì một bảng (hoặc chuỗi if/else) ánh xạ trực tiếp từ Cường độ (Magnitude) sang Bán kính (km).
+
+Ví dụ (code logic giả):
+```python
+def get_radii_from_magnitude(magnitude):
+    if magnitude < 5.0:
+        # Ít nghiêm trọng
+        return {'danger_zone': 5, 'warning_zone': 10} # km
+    elif 5.0 <= magnitude < 6.5:
+        # Nghiêm trọng
+        return {'danger_zone': 15, 'warning_zone': 30}
+    elif magnitude >= 6.5:
+        # Rất nghiêm trọng
+        return {'danger_zone': 25, 'warning_zone': 50}
+    else:
+        return {'danger_zone': 1, 'warning_zone': 2}
+```
+**Ưu điểm**: Cực kỳ nhanh, dễ triển khai, dễ hiểu, dễ điều chỉnh (chỉ cần đổi số trong bảng).
+
+**Nhược điểm**: Kém chính xác về mặt khoa học, mang tính chủ quan, không tính đến các yếu tố địa chất.
+
+**B. Phương pháp 2: Mô hình Suy giảm**
+
+Đây là phương pháp khoa học, mô phỏng chính xác cách năng lượng (rung chấn) suy giảm khi lan truyền ra xa tâm chấn.
+
+Logic: Thuật toán giải một phương trình vật lý để tìm khoảng cách (bán kính) mà tại đó, mức độ rung chấn (ví dụ: Gia tốc nền cực đại - PGA) giảm xuống dưới một ngưỡng "an toàn" hoặc "cảnh báo" cụ thể.
+
+Công thức (Khái niệm):$$Radius = f(\text{Magnitude}, \text{TargetIntensity}, \text{SoilType})$$
+
+Trong đó:
+
+- ``f(...)``: Là một Hàm Suy giảm (Attenuation Function). Đây là một công thức phức tạp, thường có dạng logarit, được các nhà địa chấn học phát triển (ví dụ: mô hình Campbell-Bozorgnia, Idriss).
+
+- `Magnitude`: Cường độ của trận động đất (ví dụ: 7.0 Richter).
+
+- `TargetIntensity`: Mức cường độ (rung chấn) mục tiêu mà chúng ta muốn vẽ ranh giới. Ví dụ: "Tìm bán kính mà tại đó rung chấn > 0.3g" (mức gây thiệt hại cho công trình).
+
+- `SoilType` (Nâng cao): (Tùy chọn) Loại đất tại chỗ (nền đá cứng, đất cát, hay đất yếu) ảnh hưởng rất lớn đến tốc độ suy giảm và khuếch đại rung chấn.
+
+**Ưu điểm**: Rất chính xác về mặt vật lý, tạo ra các vùng ảnh hưởng thực tế.
+
+**Nhược điểm**: Tính toán phức tạp, đòi hỏi nhiều dữ liệu đầu vào (phải biết TargetIntensity mong muốn là gì) và cần các mô hình khoa học đã được kiểm chứng.
+
 
 ## 3. Công cụ Kỹ thuật & Định dạng Dữ liệu
 
