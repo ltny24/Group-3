@@ -6,7 +6,7 @@
 
 ## 1. Giới thiệu Vấn đề
 
-Để giải quyết vấn đề phân vùng rủi ro thiên tai, một **Mô hình Tính điểm có Trọng số (Weighted Scoring Model)** được đề xuất. Phương pháp này cung cấp một cơ chế linh hoạt để tổng hợp nhiều yếu tố rủi ro không đồng nhất (ví dụ: khoảng cách, độ cao, dữ liệu lịch sử) thành một chỉ số rủi ro (Risk Score) duy nhất, có thể định lượng và trực quan hóa.
+Để giải quyết vấn đề phân vùng rủi ro thiên tai, một **Mô hình Tính điểm có Trọng số (Weighted Scoring Model)** được đề xuất. Phương pháp này cung cấp một cơ chế linh hoạt để tổng hợp nhiều yếu tố rủi ro không đồng nhất (ví dụ: khoảng cách, độ cao, dữ liệu lịch sử) thành một chỉ số rủi ro duy nhất, có thể định lượng và trực quan hóa.
 
 Báo cáo này trình bày quy trình 5 bước để xây dựng thuật toán tính toán Risk Score.
 
@@ -14,20 +14,20 @@ Báo cáo này trình bày quy trình 5 bước để xây dựng thuật toán 
 
 ## 2. Quy trình 5 bước Xây dựng Thuật toán
 
-### Bước 1: Xác định các Yếu tố Rủi ro (Input Factors)
+### Bước 1: Xác định các Yếu tố Rủi ro
 
 Quá trình bắt đầu bằng việc xác định tất cả các lớp dữ liệu (data layers) đầu vào ảnh hưởng đến rủi ro tại một vị trí (ví dụ: mỗi ô lưới 1km x 1km).
 
-* **Yếu tố Động (Dynamic Factors):** Dữ liệu thay đổi theo thời gian thực.
+* **Yếu tố Động:** Dữ liệu thay đổi theo thời gian thực.
     * `F1`: Khoảng cách tới tâm bão hoặc vùng ảnh hưởng bão.
     * `F2`: Tình trạng cảnh báo lũ lụt đang hoạt động (Có/Không).
     * `F3`: Cường độ rung chấn (Động đất) dự báo.
-* **Yếu tố Tĩnh (Static Factors):** Dữ liệu địa lý hoặc lịch sử.
+* **Yếu tố Tĩnh:** Dữ liệu địa lý hoặc lịch sử.
     * `F4`: Độ cao so với mực nước biển (Digital Elevation Model - DEM).
     * `F5`: Dữ liệu lịch sử thiên tai (ví dụ: vùng ngập lụt 100 năm).
     * `F6`: Khoảng cách tới bờ biển (cho rủi ro bão, sóng thần).
 
-### Bước 2: Chuẩn hóa Dữ liệu (Normalization)
+### Bước 2: Chuẩn hóa Dữ liệu
 
 Đây là bước bắt buộc để đồng bộ hóa các đơn vị đo lường khác nhau (ví dụ: "mét" độ cao và "km" khoảng cách). Nếu không chuẩn hóa, một yếu tố có thang đo lớn (như độ cao) sẽ lấn át hoàn toàn các yếu tố khác.
 
@@ -51,7 +51,7 @@ Quá trình bắt đầu bằng việc xác định tất cả các lớp dữ l
 
 Sau bước này, tất cả các yếu tố `F1, F2, F3...` đều có một giá trị chuẩn hóa (Normalized Score) từ 0 đến 1.
 
-### Bước 3: Gán Trọng số (Weighting)
+### Bước 3: Gán Trọng số
 
 Không phải mọi yếu tố đều có tầm quan trọng như nhau. Các yếu tố động (như một cơn bão đang hoạt động) phải có tác động đến điểm số lớn hơn các yếu tố tĩnh (như lịch sử).
 
@@ -64,9 +64,9 @@ Không phải mọi yếu tố đều có tầm quan trọng như nhau. Các y�
     * `w6` (Bờ biển): **0.05** (Ít quan trọng)
     * **Tổng = 0.4 + 0.3 + 0.15 + 0.1 + 0.05 = 1.0**
 
-### Bước 4: Xây dựng Công thức Tổng hợp (Aggregation Formula)
+### Bước 4: Xây dựng Công thức Tổng hợp
 
-Điểm rủi ro cuối cùng (Risk Score) được tính bằng tổng có trọng số của các điểm chuẩn hóa (từ Bước 2) và trọng số (từ Bước 3).
+Điểm rủi ro cuối cùng được tính bằng tổng có trọng số của các điểm chuẩn hóa (từ Bước 2) và trọng số (từ Bước 3).
 
 **Công thức tính Risk Score:**
 `RiskScore = (w1 * Score_F1) + (w2 * Score_F2) + (w4 * Score_F4) + (w5 * Score_F5) + (w6 * Score_F6)`
@@ -87,21 +87,66 @@ Không phải mọi yếu tố đều có tầm quan trọng như nhau. Các y�
 
 Kết quả: Ô lưới này có điểm rủi ro là **0.585** (trên thang điểm từ 0 đến 1).
 
-### Bước 5: Phân loại Điểm số (Classification)
+### Bước 5: Phát triển Thuật toán Phân loại (Tô màu)
 
-Bước cuối cùng là chuyển đổi điểm số (ví dụ: 0.585) thành các cấp độ rủi ro trực quan (Xanh, Vàng, Cam, Đỏ) mà người dùng cuối có thể hiểu được.
+Sau khi có được `risk_score_grid` (một mảng 2D chứa các giá trị 0.0-1.0) từ Bước 4, nhiệm vụ của Bước 5 là tạo ra một "Lưới Phân loại" (Classified Grid) mới. Lưới này là một mảng 2D có cùng kích thước, nhưng thay vì chứa điểm số, nó chứa một số nguyên (ví dụ: 0, 1, 2, 3) đại diện cho cấp độ rủi ro (An toàn, Thấp, Cao, Nguy hiểm).
 
-* **Phương pháp 1 (Khuyến nghị):** Sử dụng thuật toán **Jenks Natural Breaks**. Thuật toán này sẽ phân tích toàn bộ dải điểm số (ví dụ: từ 0.1 đến 0.8) và tìm ra các điểm ngắt (breaks) tự nhiên trong dữ liệu để nhóm các giá trị tương tự nhau.
-* **Phương pháp 2 (Prototype):** Định nghĩa thủ công (Hard-code) các ngưỡng.
+Lưới số nguyên này sau đó được gửi đến Frontend (Mapbox) để tô màu.
 
-**Ví dụ phân loại thủ công:**
+**A. Phương pháp 1: Phân loại Thủ công (Manual/Static Classification)**
 
-* **0.0 - 0.25:** An toàn (Xanh)
-* **0.26 - 0.50:** Rủi ro thấp (Vàng)
-* **0.51 - 0.75:** Rủi ro cao (Cam) $\leftarrow$ (Điểm 0.585 rơi vào đây)
-* **0.76 - 1.0:** Nguy hiểm (Đỏ)
+Phương pháp này dùng các ngưỡng cố định, do chuyên gia định nghĩa.
 
----
+**Logic**: Chúng ta định nghĩa các "bin" (khoảng giá trị) và dùng thư viện NumPy để "số hóa" toàn bộ lưới một cách nhanh chóng.
+
+Công cụ: `numpy.digitize` hoặc `numpy.select`.
+
+**Ví dụ (sử dụng `numpy.select`):**
+
+Đầu tiên, định nghĩa các điều kiện và các giá trị (số nguyên) tương ứng.
+
+`condlist` = [ `risk_score_grid` <= 0.25, (Điều kiện 1) `risk_score_grid` <= 0.50, (Điều kiện 2) `risk_score_grid` <= 0.75 (Điều kiện 3) ]
+
+`choicelist` = [ 0, (Giá trị nếu ĐK 1 đúng - An toàn) 1, (Giá trị nếu ĐK 2 đúng - Thấp) 2 (Giá trị nếu ĐK 3 đúng - Cao) ]
+
+Hàm `np.select(condlist, choicelist, default=3)` sẽ chạy trên toàn bộ 1 triệu ô. Nếu ô nào không thỏa mãn cả 3 điều kiện (tức là > 0.75), nó sẽ nhận giá trị default là 3 (Nguy hiểm).
+
+**Ưu điểm**: Rất nhanh, ổn định. Một điểm số 0.6 luôn luôn là "Rủi ro cao" (Cam) bất kể các ô xung quanh như thế nào.
+
+**Nhược điểm**: Nếu tất cả các điểm số đều rơi vào một khoảng (ví dụ: từ 0.4 đến 0.5), bản đồ của người dùng sẽ chỉ có một màu Vàng duy nhất, làm mất đi sự khác biệt chi tiết.
+
+**B. Phương pháp 2: Phân loại Động (Dynamic Classification - Jenks Natural Breaks)**
+
+Phương pháp này "thông minh" hơn. Nó phân tích dữ liệu hiện tại của risk_score_grid để tìm ra các điểm ngắt (breaks) "tự nhiên" nhất, nhằm tối đa hóa sự khác biệt giữa các nhóm.
+
+**Logic**: Thuật toán (ví dụ: Jenks) sẽ xem xét toàn bộ 1 triệu điểm rủi ro và tự quyết định, "OK, dựa trên dữ liệu này, dường như có 4 nhóm tự nhiên với các ngưỡng là 0.21, 0.45, và 0.68." Các ngưỡng này sẽ thay đổi mỗi khi dữ liệu đầu vào (bão, lũ) thay đổi.
+
+**Công cụ**: Thư viện `pysal.mapclassify`. Đây là thư viện chuẩn trong Phân tích Không gian Python.
+
+**Ví dụ (sử dụng `pysal.mapclassify`):**
+```python
+import mapclassify as mc
+
+k = 4 (Chúng ta muốn 4 nhóm màu)
+
+# Phải làm phẳng (flatten) lưới 2D thành mảng 1D
+
+flat_data = risk_score_grid.flatten()
+
+# Chạy thuật toán Jenks. Đây là bước tính toán
+
+classifier = mc.NaturalBreaks(flat_data, k=k)
+
+# 'classifier.bins' sẽ cho bạn biết các ngưỡng (ví dụ: [0.21, 0.45, 0.68])
+
+# 'classifier.yb' là mảng 1D chứa các lớp (0, 1, 2, 3)
+```
+
+Cuối cùng, reshape mảng `classifier.yb` trở lại kích thước (1000, 1000) ban đầu.
+
+**Ưu điểm**: Tạo ra các bản đồ có tính trực quan cao nhất, luôn hiển thị sự phân tách rõ rệt giữa các vùng (luôn có đủ 4 màu).
+
+**Nhược điểm**: Ngưỡng của bản đồ thay đổi liên tục. Một ô 0.6 hôm nay có thể là màu Cam, nhưng ngày mai khi có bão lớn, điểm 0.6 có thể chỉ là màu Vàng (vì các điểm 0.8, 0.9 xuất hiện).
 
 ## 3. Công cụ Kỹ thuật Đề xuất
 
