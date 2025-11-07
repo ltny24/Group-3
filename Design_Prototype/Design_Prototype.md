@@ -12,36 +12,21 @@ Nội dung gồm:
 
 **2. Danh sách màn hình chính**
 
-  ---------------------------------------------------------------------------------
-  **STT**   **Màn hình**    **Mục đích**                              **Mức độ ưu
-                                                                      tiên**
-  --------- --------------- ----------------------------------------- -------------
-  01        Onboarding      Giới thiệu ứng dụng, xin quyền truy cập   Cao
-                            vị trí và thông báo                       
+| **STT** | **Màn hình**      | **Mục đích**                              | **Mức độ ưu tiên** |
+|----------|------------------|--------------------------------------------|--------------------|
+| 01 | Onboarding | Giới thiệu ứng dụng, xin quyền truy cập vị trí và thông báo | Cao |
+| 02 | Home | Trung tâm hiển thị chỉ số an toàn và truy cập nhanh | Cao |
+| 03 | Map | Hiển thị vùng rủi ro, hỗ trợ tìm kiếm | Cao |
+| 04 | Alert Hub | Danh sách cảnh báo | Cao |
+| 05 | Alert Detail | Chi tiết cảnh báo | Cao |
+| 06 | SOS | Gửi tín hiệu khẩn cấp | Cao |
+| 07 | History | Lịch sử cảnh báo và SOS | Trung bình |
+| 08 | Settings | Cấu hình ứng dụng | Trung bình |
+| 09 | Profile | Quản lý thông tin cá nhân | Trung bình |
+| 10 | Help | Hỗ trợ người dùng | Thấp |
+| 11 | Notifications | Hiển thị thông báo mới | Trung bình |
+| 12 | Offline | Xử lý khi không có mạng | Trung bình |
 
-  02        Home            Trung tâm hiển thị chỉ số an toàn và truy Cao
-                            cập nhanh                                 
-
-  03        Map             Hiển thị vùng rủi ro, hỗ trợ tìm kiếm     Cao
-
-  04        Alert Hub       Danh sách cảnh báo                        Cao
-
-  05        Alert Detail    Chi tiết cảnh báo                         Cao
-
-  06        SOS             Gửi tín hiệu khẩn cấp                     Cao
-
-  07        History         Lịch sử cảnh báo và SOS                   Trung bình
-
-  08        Settings        Cấu hình ứng dụng                         Trung bình
-
-  09        Profile         Quản lý thông tin cá nhân                 Trung bình
-
-  10        Help            Hỗ trợ người dùng                         Thấp
-
-  11        Notifications   Hiển thị thông báo mới                    Trung bình
-
-  12        Offline         Xử lý khi không có mạng                   Trung bình
-  ---------------------------------------------------------------------------------
 
 **3. Mô tả chi tiết từng màn hình**
 
@@ -274,62 +259,30 @@ Nội dung gồm:
 
 **4. Bảng phân tích thành phần UI (Element Breakdown)**
 
-  --------------------------------------------------------------------------
-  **Loại thành  **Mô tả**       **Kích thước / **Màu**      **Trạng thái**
-  phần**                        Padding**                   
-  ------------- --------------- -------------- ------------ ----------------
-  **Button      Nút chính       48 px chiều    #1A73E8      Hover: #1565C0 /
-  (Primary)**   (Home, Next,    cao, 16 px                  Active: #0D47A1
-                SOS\...)        padding                     
+| **Loại thành phần** | **Mô tả** | **Kích thước / Padding** | **Màu** | **Trạng thái** |
+|----------------------|-----------|---------------------------|----------|----------------|
+| **Button (Primary)** | Nút chính (Home, Next, SOS...) | Cao 48px, padding 16px | #1A73E8 | Hover: #1565C0 / Active: #0D47A1 |
+| **Button (Danger)** | Nút khẩn (SOS) | Tròn 150–180px | #FF3B30 → #FF5E57 | Pressed: rung + đổi bóng |
+| **Card (Alert)** | Thẻ cảnh báo trong Alert Hub | Cao 100px, bo tròn 12px | Theo mức độ cảnh báo | Hover: bóng nhẹ |
+| **Navbar Item** | Mục điều hướng dưới cùng | Icon 24×24 px + text 12px | #1A73E8 | Active: tô sáng / Inactive: xám |
+| **Search Bar** | Ô tìm kiếm bản đồ | Cao 44px, bo góc 8px | #E8F1FD | Focus: viền xanh |
+| **Chip (Risk Level)** | Hiển thị mức cảnh báo nhỏ | 32×20 px | Đỏ / Cam / Vàng / Xanh | Không đổi |
+| **Progress Bar** | Thanh tiến trình (Onboarding) | Cao 6 px | #1A73E8 | Animation 0.5s |
+| **Popup / Toast** | Cảnh báo hoặc xác nhận | Rộng 80% màn hình | Trắng / Đỏ / Vàng | Tự ẩn sau 3s |
+| **List Item (History)** | Mục lịch sử | Cao 60 px | Xám nhạt / theo loại | Tap → mở chi tiết |
+| **Icon (General)** | Biểu tượng Material | 24×24 px | #1A73E8 | Active đổi độ sáng 80% |
 
-  **Button      Nút khẩn (SOS)  150--180 px    #FF3B30 →    Pressed: rung +
-  (Danger)**                    tròn           #FF5E57      đổi bóng
-
-  **Card        Thẻ cảnh báo    100 px cao, bo Tùy theo mức Hover: bóng nhẹ
-  (Alert)**     trong Alert Hub tròn 12 px     độ           
-
-  **Navbar      Mục điều hướng  Icon 24×24     #1A73E8      Active: tô sáng,
-  Item**        dưới cùng       px + text 12                Inactive: xám
-                                px                          
-
-  **Search      Ô tìm kiếm bản  Cao 44 px, bo  #E8F1FD      Focus: border
-  Bar**         đồ              góc 8 px                    xanh
-
-  **Chip (Risk  Mức cảnh báo    32×20 px       Đỏ / Cam /   Không đổi
-  Level)**      nhỏ                            Vàng / Xanh  
-
-  **Progress    Thanh tiến      Cao 6 px       #1A73E8      Animation 0.5s
-  Bar**         trình                                       
-                Onboarding                                  
-
-  **Popup /     Cảnh báo hoặc   Rộng 80% màn   Trắng / đỏ / Tự ẩn sau 3s
-  Toast**       xác nhận        hình           vàng         
-
-  **List Item   Mục lịch sử     60 px cao      Xám nhạt /   Tap → mở chi
-  (History)**                                  theo loại    tiết
-
-  **Icon        Biểu tượng      24×24 px       #1A73E8      Active đổi độ
-  (General)**   Material                                    sáng 80%
-  --------------------------------------------------------------------------
 
 **5. Animation & Feedback**
 
-  -----------------------------------------------------------------------
-  **Loại hiệu ứng**        **Thời      **Mô tả**
-                           lượng**     
-  ------------------------ ----------- ----------------------------------
-  **Transition giữa màn    0.3--0.4s   Trượt ngang (slide in/out)
-  hình**                               
+| **Loại hiệu ứng** | **Thời lượng** | **Mô tả** |
+|-------------------|----------------|-----------|
+| Transition giữa màn hình | 0.3–0.4s | Trượt ngang (slide in/out) |
+| Button Press | 0.1s | Co nhẹ + đổi màu |
+| Popup xuất hiện | 0.2s | Fade-in + scale nhẹ |
+| SOS Send | 0.5s | Hiệu ứng nhấp nháy + rung (vibration) |
+| Progress / Loading | liên tục | Vòng quay (spinner) |
 
-  **Button Press**         0.1s        Co nhẹ + đổi màu
-
-  **Popup xuất hiện**      0.2s        Fade-in + scale nhẹ
-
-  **SOS Send**             0.5s        Hiệu ứng nhấp nháy + rung
-                                       (vibration)
-
-  **Progress / Loading**   liên tục    Dạng vòng quay (spinner)
-  -----------------------------------------------------------------------
 
 **6. Accessibility & Usability**
 

@@ -26,31 +26,16 @@ minh (Smart Travel Safety Alert System)**.
 
 **II. MỤC TIÊU CHI TIẾT**
 
-  ------------------------------------------------------------------------
-  **Nhóm mục    **Mô tả cụ thể**              **Kết quả mong đợi**
-  tiêu**                                      
-  ------------- ----------------------------- ----------------------------
-  **Technical   Kết nối và hiển thị bản đồ    Bản đồ có thể hiển thị nền
-  Goal 1**      động bằng thư viện Leaflet    OSM và dữ liệu GeoJSON
+| **Nhóm mục tiêu** | **Mô tả cụ thể** | **Kết quả mong đợi** |
+|--------------------|------------------|------------------------|
+| **Technical Goal 1** | Kết nối và hiển thị bản đồ động bằng thư viện Leaflet | Bản đồ hiển thị nền OSM và dữ liệu GeoJSON |
+| **Technical Goal 2** | Vẽ vùng rủi ro (Polygon) từ dữ liệu mô phỏng | Các vùng được tô màu theo cấp độ rủi ro |
+| **Technical Goal 3** | Vẽ các điểm cảnh báo (Marker) | Marker hiển thị biểu tượng và popup thông tin |
+| **Technical Goal 4** | Cho phép người dùng tương tác (click/zoom/pan) | Có thể xem chi tiết rủi ro và điều hướng bản đồ mượt mà |
+| **Technical Goal 5** | Tích hợp cơ chế cache offline (PWA-ready) | App vẫn hiển thị khi offline |
+| **UI/UX Goal** | Giao diện trực quan, rõ ràng, dễ hiểu | Màu sắc và popup phân biệt từng cấp độ nguy hiểm |
+| **Testing Goal** | Có thể kiểm thử theo kịch bản MAP, INT, PERF, OFF | Từng mục tiêu có thể được xác minh độc lập |
 
-  **Technical   Vẽ vùng rủi ro (Polygon) từ   Các vùng được tô màu theo
-  Goal 2**      dữ liệu mô phỏng              cấp độ rủi ro
-
-  **Technical   Vẽ các điểm cảnh báo (Marker) Marker hiển thị biểu tượng
-  Goal 3**                                    và popup thông tin
-
-  **Technical   Cho phép người dùng tương tác Có thể xem chi tiết rủi ro
-  Goal 4**      (click/zoom/pan)              và điều hướng bản đồ mượt mà
-
-  **Technical   Tích hợp cơ chế cache offline App vẫn hiển thị khi offline
-  Goal 5**      (PWA-ready)                   
-
-  **UI/UX       Giao diện trực quan, rõ ràng, Màu sắc và popup phân biệt
-  Goal**        dễ hiểu                       từng cấp độ nguy hiểm
-
-  **Testing     Có thể kiểm thử theo kịch bản Từng mục tiêu có thể được
-  Goal**        MAP, INT, PERF, OFF           xác minh độc lập
-  ------------------------------------------------------------------------
 
 **III. KIẾN TRÚC VÀ LUỒNG HOẠT ĐỘNG**
 
@@ -76,24 +61,15 @@ minh (Smart Travel Safety Alert System)**.
 
 **2. Công nghệ sử dụng**
 
-  -----------------------------------------------------------------------
-  **Thành phần**              **Mô tả**
-  --------------------------- -------------------------------------------
-  **React + TypeScript**      Framework chính cho frontend
+| **Thành phần** | **Mô tả** |
+|-----------------|-----------|
+| **React + TypeScript** | Framework chính cho frontend |
+| **Leaflet.js + React-Leaflet** | Thư viện bản đồ động |
+| **OpenStreetMap TileLayer** | Nguồn nền bản đồ miễn phí |
+| **GeoJSON** | Định dạng dữ liệu vùng rủi ro và cảnh báo |
+| **Service Worker / Workbox** | Hỗ trợ cache và hoạt động offline |
+| **Supercluster (optional)** | Gom nhóm (clustering) marker |
 
-  **Leaflet.js +              Thư viện bản đồ động
-  React-Leaflet**             
-
-  **OpenStreetMap TileLayer** Nguồn nền bản đồ miễn phí
-
-  **GeoJSON**                 Định dạng dữ liệu cho vùng rủi ro và cảnh
-                              báo
-
-  **Service Worker /          Hỗ trợ cache và chạy offline
-  Workbox**                   
-
-  **Supercluster (optional)** Gom nhóm (clustering) marker
-  -----------------------------------------------------------------------
 
 **IV. CẤU TRÚC HỆ THỐNG**
 
@@ -283,52 +259,34 @@ phase3_map_integration
 
 **2. Test case OFF-001**
 
-  -----------------------------------------------------------------------
-  **Bước**                        **Kỳ vọng**
-  ------------------------------- ---------------------------------------
-  1\. Mở app online               Bản đồ + dữ liệu hiển thị bình thường
+| **Bước** | **Kỳ vọng** |
+|-----------|-------------|
+| 1. Mở app online | Bản đồ + dữ liệu hiển thị bình thường |
+| 2. Tắt mạng, reload | Các polygon và marker vẫn hiển thị |
+| 3. Xóa cache và reload offline | Dữ liệu không tải được (đúng kỳ vọng) |
 
-  2\. Tắt mạng, reload            Các polygon và marker vẫn hiển thị
-
-  3\. Xóa cache và reload offline Dữ liệu không tải được (đúng kỳ vọng)
-  -----------------------------------------------------------------------
 
 **VIII. TESTING PLAN**
 
-  -------------------------------------------------------------------------
-  **ID**     **Kiểm thử**   **Mô tả**                      **Kết quả mong
-                                                           đợi**
-  ---------- -------------- ------------------------------ ----------------
-  MAP-001    Render Map     Bản đồ hiển thị vùng rủi ro    OK
+| **ID** | **Kiểm thử** | **Mô tả** | **Kết quả mong đợi** |
+|---------|--------------|-----------|-----------------------|
+| MAP-001 | Render Map | Bản đồ hiển thị vùng rủi ro | OK |
+| MAP-002 | Layer Style | Màu vùng khớp properties.color | OK |
+| INT-001 | Click Polygon | Popup hiển thị name/riskLevel/hazard | OK |
+| INT-002 | Click Marker | Popup hiển thị title/severity/type | OK |
+| PERF-001 | 300 Marker Test | Không lag ở zoom 10–12 | OK |
+| OFF-001 | Offline Cache | Dữ liệu vẫn hiển thị khi offline | OK |
 
-  MAP-002    Layer Style    Màu vùng khớp properties.color OK
-
-  INT-001    Click Polygon  Popup hiển thị                 OK
-                            name/riskLevel/hazard          
-
-  INT-002    Click Marker   Popup hiển thị                 OK
-                            title/severity/type            
-
-  PERF-001   300 Marker     Không lag ở zoom 10--12        OK
-             Test                                          
-
-  OFF-001    Offline Cache  Dữ liệu vẫn hiển thị khi       OK
-                            offline                        
-  -------------------------------------------------------------------------
 
 **IX. VẤN ĐỀ PHÁT SINH & GIẢI PHÁP**
 
-  -----------------------------------------------------------------------
-  **Vấn đề**             **Nguyên nhân**       **Giải pháp**
-  ---------------------- --------------------- --------------------------
-  Icon Marker không hiện Sai đường dẫn ảnh     Gán icon URL thủ công
+ | **Vấn đề** | **Nguyên nhân** | **Giải pháp** |
+|-------------|-----------------|---------------|
+| Icon Marker không hiện | Sai đường dẫn ảnh | Gán icon URL thủ công |
+| Bản đồ trắng | Thiếu CSS Leaflet | Import `leaflet.css` |
+| Polygon không hiển thị | Sai cấu trúc GeoJSON | Kiểm tra mảng coordinates |
+| Lỗi khi build PWA | Thiếu precache file | Thêm vào `workbox.config.js` |
 
-  Bản đồ trắng           Thiếu CSS Leaflet     Import leaflet.css
-
-  Polygon không hiển thị Sai cấu trúc GeoJSON  Kiểm tra mảng coordinates
-
-  Lỗi khi build PWA      Thiếu precache file   Thêm vào workbox.config.js
-  -----------------------------------------------------------------------
 
 **X. HƯỚNG PHÁT TRIỂN**
 

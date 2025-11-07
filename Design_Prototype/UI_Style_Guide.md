@@ -2,51 +2,28 @@
 
 **1. Bảng màu sắc (Color Palette)**
 
-  -------------------------------------------------------------------------
-  **Mục đích**       **Màu**    **Mã      **Ghi chú**
-                                Hex**     
-  ------------------ ---------- --------- ---------------------------------
-  Màu chủ đạo        Xanh dương #1A73E8   Dùng cho nút, icon, thanh điều
-  (Primary)                               hướng chính
+| **Mục đích** | **Màu** | **Mã Hex** | **Ghi chú** |
+|---------------|----------|-------------|--------------|
+| Màu chủ đạo (Primary) | Xanh dương | #1A73E8 | Dùng cho nút, icon, thanh điều hướng chính |
+| Phụ (Secondary) | Xanh nhạt | #E8F1FD | Nền thẻ, khung hiển thị thông tin |
+| An toàn | Xanh lá | #34C759 | Thông báo “An toàn”, trạng thái đã xử lý |
+| Cảnh báo | Cam | #FF9500 | Cảnh báo mức độ trung bình |
+| Nguy cấp | Đỏ | #FF3B30 | Dùng cho SOS và cảnh báo nghiêm trọng |
+| Nền | Trắng | #FFFFFF | Màu nền chính |
+| Chữ chính | Xám đậm | #0F172A | Tiêu đề, nội dung chính |
+| Chữ phụ | Xám vừa | #6B7280 | Ghi chú, thời gian, phụ đề |
 
-  Phụ (Secondary)    Xanh nhạt  #E8F1FD   Nền thẻ, khung hiển thị thông tin
-
-  An toàn            Xanh lá    #34C759   Thông báo "An toàn", tình trạng
-                                          đã xử lý
-
-  Cảnh báo           Cam        #FF9500   Cảnh báo mức độ Trung bình
-
-  Nguy cấp           Đỏ         #FF3B30   Dùng cho SOS và cảnh báo nghiêm
-                                          trọng
-
-  Nền                Trắng      #FFFFFF   Màu nền chính
-
-  Chữ chính          Xám đậm    #0F172A   Dùng cho tiêu đề, nội dung chính
-
-  Chữ phụ            Xám vừa    #6B7280   Ghi chú, thời gian, phụ đề
-  -------------------------------------------------------------------------
 
 **2. Phông chữ (Typography)**
 
-  -------------------------------------------------------------------------
-  **Mục đích sử  **Phông     **Cỡ chữ   **Độ    **Ví dụ**
-  dụng**         chữ**       (px)**     đậm**   
-  -------------- ----------- ---------- ------- ---------------------------
-  Tiêu đề lớn    Inter /     24         700     "Travel Safety System"
-                 Roboto                         
+ | **Mục đích sử dụng** | **Phông chữ** | **Cỡ chữ (px)** | **Độ đậm** | **Ví dụ** |
+|-----------------------|---------------|------------------|-------------|------------|
+| Tiêu đề lớn | Inter / Roboto | 24 | 700 | “Travel Safety System” |
+| Tiêu đề phần | Inter / Roboto | 20 | 600 | “Cảnh báo thời gian thực” |
+| Nội dung chính | Inter / Roboto | 16 | 400 | “Nhận cảnh báo ngay khi có nguy cơ” |
+| Phụ đề / ghi chú | Inter / Roboto | 14 | 400 | “5 phút trước” |
+| Nút bấm | Inter / Roboto | 16 | 600 | “Bắt đầu”, “Đã đọc” |
 
-  Tiêu đề phần   Inter /     20         600     "Cảnh báo thời gian thực"
-                 Roboto                         
-
-  Nội dung chính Inter /     16         400     "Nhận cảnh báo ngay khi có
-                 Roboto                         nguy cơ"
-
-  Phụ đề / ghi   Inter /     14         400     "5 phút trước"
-  chú            Roboto                         
-
-  Nút bấm        Inter /     16         600     "Bắt đầu", "Đã đọc"
-                 Roboto                         
-  -------------------------------------------------------------------------
 
 **3. Quy định Bố cục và Các Thanh phần Giao Diện**
 

@@ -20,29 +20,15 @@ Kết quả sau giai đoạn này:
 
 **II. MỤC TIÊU**
 
-  ------------------------------------------------------------------------------
-  **Nhóm mục tiêu**    **Mô tả**                               **Kết quả mong
-                                                               đợi**
-  -------------------- --------------------------------------- -----------------
-  **API Integration**  Kết nối đến các endpoint /safety/score, Dữ liệu thật được
-                       /map/pois, /alerts/history,             tải từ server
-                       /sos/activate                           
+| **Nhóm mục tiêu** | **Mô tả** | **Kết quả mong đợi** |
+|--------------------|-----------|------------------------|
+| **API Integration** | Kết nối endpoint `/safety/score`, `/map/pois`, `/alerts/history`, `/sos/activate` | Dữ liệu thật được tải từ server |
+| **Authentication** | Xác thực người dùng bằng JWT (`/users/me`) | Xác minh token hợp lệ |
+| **ALERT System** | Hiển thị danh sách cảnh báo, thông báo popup, mark-as-read | Alert list cập nhật tự động |
+| **SOS Feature** | Gửi tín hiệu cứu hộ từ vị trí hiện tại | Server nhận được yêu cầu SOS |
+| **Offline Queue** | Lưu tạm yêu cầu khi offline, gửi lại khi online | Retry thành công |
+| **Notification** | Hiển thị cảnh báo đẩy và toast thông báo | User được cảnh báo tức thì |
 
-  **Authentication**   Xác thực người dùng bằng JWT            Xác minh token
-                       (/users/me)                             hợp lệ
-
-  **ALERT System**     Hiển thị danh sách cảnh báo, thông báo  Alert list cập
-                       popup, mark-as-read                     nhật tự động
-
-  **SOS Feature**      Gửi tín hiệu cứu hộ từ vị trí hiện tại  Server nhận được
-                                                               yêu cầu SOS
-
-  **Offline Queue**    Lưu tạm yêu cầu khi offline, gửi lại    Retry thành công
-                       khi online                              
-
-  **Notification**     Hiển thị cảnh báo đẩy và toast thông    User được cảnh
-                       báo                                     báo tức thì
-  ------------------------------------------------------------------------------
 
 **III. KIẾN TRÚC HỆ THỐNG**
 
@@ -64,23 +50,16 @@ Kết quả sau giai đoạn này:
 
 **2. Thành phần chính**
 
-  -------------------------------------------------------------------------
-  **Thành phần**                      **Vai trò**
-  ----------------------------------- -------------------------------------
-  src/api/client.ts                   Kết nối Axios, đính kèm token tự động
+ | **Thành phần** | **Vai trò** |
+|-----------------|-------------|
+| `src/api/client.ts` | Kết nối Axios, tự động đính kèm token |
+| `src/api/alerts.ts` | Lấy danh sách cảnh báo |
+| `src/api/sos.ts` | Gửi yêu cầu SOS |
+| `src/utils/pwaQueue.ts` | Quản lý hàng đợi khi offline |
+| `src/components/alert/AlertHub.tsx` | Giao diện hiển thị cảnh báo |
+| `src/components/sos/SOSButton.tsx` | Nút gửi tín hiệu SOS |
+| `src/hooks/useAuth.ts` | Kiểm tra và refresh token người dùng |
 
-  src/api/alerts.ts                   Lấy danh sách cảnh báo
-
-  src/api/sos.ts                      Gửi yêu cầu SOS
-
-  src/utils/pwaQueue.ts               Quản lý hàng đợi khi offline
-
-  src/components/alert/AlertHub.tsx   Giao diện hiển thị cảnh báo
-
-  src/components/sos/SOSButton.tsx    Nút gửi tín hiệu SOS
-
-  src/hooks/useAuth.ts                Kiểm tra và refresh token người dùng
-  -------------------------------------------------------------------------
 
 **IV. CÁCH TÍCH HỢP API THẬT**
 
@@ -215,44 +194,28 @@ processQueue(async (url,body) =\> await api.post(url, body));
 
 **VII. GIAO DIỆN NGƯỜI DÙNG**
 
-  -----------------------------------------------------------------------
-  **Thành phần**              **Mô tả**
-  --------------------------- -------------------------------------------
-  **Alert Hub**               Danh sách cảnh báo, có filter theo cấp độ
+| **Thành phần** | **Mô tả** |
+|-----------------|-----------|
+| **Alert Hub** | Danh sách cảnh báo, có filter theo cấp độ |
+| **Map View** | Bản đồ động hiển thị vùng rủi ro thật |
+| **SOS Button** | Nút đỏ nổi bật, hiển thị trạng thái gửi |
+| **Notification Toast** | Popup cảnh báo khi có cảnh báo mới |
+| **Dark Mode / Responsive** | Giao diện tương thích thiết bị và chế độ nền |
 
-  **Map View**                Bản đồ động hiển thị vùng rủi ro thật
-
-  **SOS Button**              Nút đỏ nổi bật, hiển thị trạng thái gửi
-
-  **Notification Toast**      Thông báo popup khi có cảnh báo mới
-
-  **Dark Mode / Responsive**  Giao diện tương thích thiết bị & chế độ nền
-  -----------------------------------------------------------------------
 
 **VIII. TEST CASES**
 
-  --------------------------------------------------------------------------
-  **ID**         **Mô tả**                   **Kỳ vọng**
-  -------------- --------------------------- -------------------------------
-  **API-001**    /safety/score trả về điểm   200 OK, có score, riskLevel
-                 an toàn                     
+| **ID** | **Mô tả** | **Kỳ vọng** |
+|---------|-----------|--------------|
+| **API-001** | `/safety/score` trả về điểm an toàn | 200 OK, có score, riskLevel |
+| **API-002** | `/alerts/history` hoạt động | Danh sách hiển thị đủ alert |
+| **API-003** | `/sos/activate` (online) | Trả status: ok, hiển thị success |
+| **API-004** | `/sos/activate` (offline) | Lưu vào queue, gửi lại sau khi online |
+| **UI-001** | Alert Hub filter | Lọc đúng theo severity |
+| **UI-002** | SOSButton confirm | Xác nhận & gửi đúng payload |
+| **PWA-001** | Offline retry | Gửi lại khi có mạng |
+| **AUTH-001** | `/users/me` | Trả thông tin user hợp lệ |
 
-  **API-002**    /alerts/history hoạt động   Danh sách hiển thị đủ alert
-
-  **API-003**    /sos/activate online        Trả status: ok, hiển thị
-                                             success
-
-  **API-004**    /sos/activate offline       Lưu vào queue, gửi lại sau khi
-                                             online
-
-  **UI-001**     Alert Hub filter            Lọc đúng theo severity
-
-  **UI-002**     SOSButton confirm           Xác nhận & gửi đúng payload
-
-  **PWA-001**    Offline retry               Gửi lại khi có mạng
-
-  **AUTH-001**   /users/me                   Trả thông tin user hợp lệ
-  --------------------------------------------------------------------------
 
 **IX. BẢO MẬT & QUYỀN RIÊNG TƯ**
 

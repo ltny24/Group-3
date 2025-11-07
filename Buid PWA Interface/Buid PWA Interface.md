@@ -40,22 +40,12 @@ mobile app:
 
 PWA dựa trên 3 thành phần cốt lõi:
 
-  --------------------------------------------------------------------------
-  **Thành phần** **Mô tả**                     **File tương ứng trong dự
-                                               án**
-  -------------- ----------------------------- -----------------------------
-  **Manifest**   Cung cấp thông tin mô tả ứng  public/manifest.webmanifest
-                 dụng (tên, icon, màu,         
-                 start_url, display).          
+| **Thành phần**          | **Mô tả**                                      | **File tương ứng trong dự án**           |
+|--------------------------|------------------------------------------------|------------------------------------------|
+| **Manifest**             | Cung cấp thông tin mô tả ứng dụng (tên, icon, start_url, display). | `public/manifest.webmanifest` |
+| **Service Worker (SW)**  | Script chạy nền giúp cache dữ liệu và cho phép hoạt động offline. | `public/sw.js` |
+| **HTTPS**                | Giao thức bảo mật bắt buộc để SW hoạt động.   | Vercel / Netlify / Firebase Hosting |
 
-  **Service      Script chạy nền giúp cache dữ public/sw.js
-  Worker (SW)**  liệu và cho phép hoạt động    
-                 offline.                      
-
-  **HTTPS**      Giao thức bảo mật, bắt buộc   Môi trường
-                 để SW hoạt động.              Vercel/Netlify/Firebase
-                                               Hosting
-  --------------------------------------------------------------------------
 
 **3. Kiến trúc & cấu trúc dự án**
 
@@ -162,35 +152,22 @@ height="3.5918099300087487in"}
 
 **5.1 Vòng đời SW**
 
-  ----------------------------------------------------------------------------
-  **Giai đoạn**  **Mô tả**                 **Hành động cụ thể trong sw.js**
-  -------------- ------------------------- -----------------------------------
-  **Install**    Tải SW lần đầu            Cache index.html, JS, CSS, icons,
-                                           mock JSON
+| **Giai đoạn** | **Mô tả**             | **Hành động cụ thể trong `sw.js`** |
+|----------------|----------------------|------------------------------------|
+| **Install**    | Tải SW lần đầu       | Cache `index.html`, JS, CSS, icons, mock JSON |
+| **Activate**   | Xóa cache cũ, kích hoạt SW mới | Gọi `clients.claim()` |
+| **Fetch**      | Chặn request, trả từ cache | Dùng `caches.match()` và `fetch()` fallback |
 
-  **Activate**   Xóa cache cũ, kích hoạt   Gọi clients.claim()
-                 SW mới                    
-
-  **Fetch**      Chặn request, trả từ      Dùng caches.match() và fetch()
-                 cache                     fallback
-  ----------------------------------------------------------------------------
 
 **5.2 Chiến lược cache**
 
-  -----------------------------------------------------------------------
-  **Loại dữ liệu**      **Chiến lược**              **Mục tiêu**
-  --------------------- --------------------------- ---------------------
-  App Shell             **Cache-first**             Tốc độ tải nhanh
-  (HTML/JS/CSS)                                     
+| **Loại dữ liệu**         | **Chiến lược**                     | **Mục tiêu**                    |
+|---------------------------|------------------------------------|----------------------------------|
+| App Shell (HTML/JS/CSS)   | Cache-first                        | Tốc độ tải nhanh                |
+| Mock JSON (data)          | Cache-first + background update    | Dữ liệu vẫn hiển thị offline    |
+| Route SPA                | Fallback `/index.html`             | Tránh lỗi 404 khi refresh       |
+| Icon                      | Cache-only                         | Không thay đổi                 |
 
-  Mock JSON (data)      **Cache-first + background  Dữ liệu vẫn hiển thị
-                        update**                    offline
-
-  Route SPA             **Fallback /index.html**    Không lỗi 404 khi
-                                                    refresh
-
-  Icon                  **Cache-only**              Không thay đổi
-  -----------------------------------------------------------------------
 
 **5.3 Code Service Worker**
 
