@@ -1,0 +1,42 @@
+{
+  "weather": [
+    {
+      "city": "Hanoi",
+      "temperature": 30.5,
+      "humidity": 70,
+      "description": "Sunny"
+    },
+    {
+      "city": "Ho Chi Minh",
+      "temperature": 32.2,
+      "humidity": 65,
+      "description": "Partly Cloudy"
+    },
+    {
+      "city": "Da Nang",
+      "temperature": 29.0,
+      "humidity": 75,
+      "description": "Rainy"
+    }
+  ],
+  "disaster": [
+    {
+      "type": "Flood",
+      "location": "Hanoi",
+      "severity": 3,
+      "alert": "Evacuate low-lying areas"
+    },
+    {
+      "type": "Storm",
+      "location": "Da Nang",
+      "severity": 2,
+      "alert": "Secure outdoor objects"
+    },
+    {
+      "type": "Heatwave",
+      "location": "Ho Chi Minh",
+      "severity": 1,
+      "alert": "Stay hydrated and avoid direct sunlight"
+    }
+  ]
+}
