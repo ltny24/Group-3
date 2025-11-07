@@ -1,0 +1,62 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.705,
+          10.785
+        ]
+      },
+      "properties": {
+        "id": "A1",
+        "title": "STORM alert #1",
+        "severity": 3,
+        "type": "storm",
+        "source": "mock",
+        "issuedAt": "2025-11-06T17:48:25.730769",
+        "expiresAt": "2025-11-06T20:48:25.730779"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.735,
+          10.805
+        ]
+      },
+      "properties": {
+        "id": "A2",
+        "title": "FLOOD alert #2",
+        "severity": 2,
+        "type": "flood",
+        "source": "mock",
+        "issuedAt": "2025-11-06T17:48:25.730796",
+        "expiresAt": "2025-11-06T19:48:25.730799"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          106.69,
+          10.745
+        ]
+      },
+      "properties": {
+        "id": "A3",
+        "title": "LANDSLIDE alert #3",
+        "severity": 4,
+        "type": "landslide",
+        "source": "mock",
+        "issuedAt": "2025-11-06T17:48:25.730807",
+        "expiresAt": "2025-11-06T18:48:25.730811"
+      }
+    }
+  ]
+}
