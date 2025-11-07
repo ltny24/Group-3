@@ -128,7 +128,3 @@ Dưới đây là bảng phân công chi tiết vai trò, nhiệm vụ và branc
 | **6** | **UI/UX Developer** | `uiux-safety-interface(24127082)` | Thiết kế giao diện và trải nghiệm người dùng cho app | - Tạo mockup/Prototype cho: **Interactive Safety Map**, **Disaster & Weather Alert Hub**, **Quick SOS Screen**.<br>- Thực hiện responsive design & dark mode.<br>- Kết nối frontend với API cảnh báo. |
 | **7** | **Testing Lead** | `testing-and-qc(24127586)` | Đảm bảo chất lượng, kiểm thử tích hợp và hiệu năng | - Viết **test case** cho từng module.<br>- Thực hiện **integration test** giữa các API cảnh báo & bản đồ.<br>- Kiểm thử **hiệu năng & stress test** khi có nhiều người nhận cảnh báo cùng lúc.<br>- Báo cáo bug qua Jira/GitHub Issues. |
 
-
-
-
-
