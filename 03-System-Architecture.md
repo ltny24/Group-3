@@ -3,7 +3,8 @@
 **Dự án:** Intelligent Travel Safety System (PWA)  
 **Phiên bản:** 1.4 (Hoàn thiện chính sách Gateway, Log Level và Chi tiết Deployment)  
 **Dựa trên:** [02-SRS-Requirements.md](./02-SRS-Requirements.md) 
-**Người xây dựng:** *System Architect
+
+**Người xây dựng:** *System Analayst
 
 ---
 
