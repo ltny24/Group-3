@@ -130,7 +130,7 @@ Xây dựng mô hình ánh xạ `Input -> Safety Score` để đánh giá mức 
 
 ```json
 {
-  "safety_score": 68.2,
+  "safety_score": 68.1,
   "risk_level": "Moderate",
   "model_version": "v1.0"
 }
